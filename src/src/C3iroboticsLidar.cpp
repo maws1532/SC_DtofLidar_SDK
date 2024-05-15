@@ -27,8 +27,8 @@ History:
 #include <cmath>
 //#include <sys/io.h>
 /********************************** Name space ************************************/
-using namespace everest;
-using namespace everest::hwdrivers;
+using namespace dtfeverest;
+using namespace dtfeverest::dtfhwdrivers;
 
 /***********************************************************************************
 Function:     C3iroboticsLidar
@@ -40,7 +40,7 @@ Others:       None
 ***********************************************************************************/
 C3iroboticsLidar::C3iroboticsLidar()
 {
-    SDKVersion = "V1.0"; 
+    SDKVersion = "V1.1"; 
     m_device_connect = NULL;
     m_data_with_signal = true;
     m_receive_lidar_speed = false;

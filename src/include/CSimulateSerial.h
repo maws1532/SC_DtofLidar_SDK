@@ -21,9 +21,9 @@ History:
 #include <string>
 #include <fstream>
 
-namespace everest
+namespace dtfeverest
 {
-	namespace hwdrivers
+	namespace dtfhwdrivers
 	{
 		/* For connecting to devices through a serial port */
 		class CSimulateSerial: public CDeviceConnection

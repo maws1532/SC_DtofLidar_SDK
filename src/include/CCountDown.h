@@ -22,9 +22,9 @@ History:
 #include <string>
 
 
-namespace everest
+namespace dtfeverest
 {
-    namespace hwdrivers
+    namespace dtfhwdrivers
     {
         class CCountDown
         {

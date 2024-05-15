@@ -19,8 +19,8 @@ History:
 #include <time.h>
 
 /*********************************** Name space ***********************************/
-using namespace everest;
-using namespace everest::hwdrivers;
+using namespace dtfeverest;
+using namespace dtfeverest::dtfhwdrivers;
 
 /************************* Static varible init*************************************/
 #if defined(_POSIX_TIMERS) && defined(_POSIX_MONOTONIC_CLOCK)

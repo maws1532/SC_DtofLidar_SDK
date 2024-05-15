@@ -28,9 +28,9 @@ History:
 
 /******************************* Other libs includes ******************************/
 
-namespace everest
+namespace dtfeverest
 {
-	namespace hwdrivers
+	namespace dtfhwdrivers
 	{
 	    struct TLidarScan
 	    {

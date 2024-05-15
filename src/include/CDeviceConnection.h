@@ -20,9 +20,9 @@ History:
 #include <string>
 #include <map>
 
-namespace everest
+namespace dtfeverest
 {
-	namespace hwdrivers
+	namespace dtfhwdrivers
 	{
 		/*
 		   Subclasses of this connection type should call setDCPortType in

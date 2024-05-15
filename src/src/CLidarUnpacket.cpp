@@ -19,8 +19,8 @@ History:
 #include <string.h>
 
 /********************************** Name space ************************************/
-using namespace everest;
-using namespace everest::hwdrivers;
+using namespace dtfeverest;
+using namespace dtfeverest::dtfhwdrivers;
 /***********************************************************************************
 Function:     CLidarUnpacket
 Description:  The constructor of CLidarUnpacket

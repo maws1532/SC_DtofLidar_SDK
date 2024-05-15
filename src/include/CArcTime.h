@@ -19,9 +19,9 @@ History:
 #include <stddef.h>
 #include <sys/time.h>
 
-namespace everest
+namespace dtfeverest
 {
-    namespace hwdrivers
+    namespace dtfhwdrivers
     {
         /*
             This class is for timing durations or time between events.

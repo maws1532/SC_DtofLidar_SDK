@@ -92,7 +92,7 @@ static std::string renameFileExtension(std::string &file_path, std::string new_e
   Convert a timestamp into this textual form (in local time):
       YEAR/MONTH/DAY,HH:MM:SS.MMM
   ---------------------------------------------------------------*/
-static std::string  dateTimeLocalToString(const everest::hwdrivers::TTimeStamp &t)
+static std::string  dateTimeLocalToString(const dtfeverest::dtfhwdrivers::TTimeStamp &t)
 {
 	if (t== INVALID_TIMESTAMP) return std::string("INVALID_TIMESTAMP");
 

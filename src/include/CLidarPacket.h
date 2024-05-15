@@ -26,9 +26,9 @@ History:
 #include <stddef.h>
 
 
-namespace everest
+namespace dtfeverest
 {
-	namespace hwdrivers
+	namespace dtfhwdrivers
 	{
         enum TLidarError
         {

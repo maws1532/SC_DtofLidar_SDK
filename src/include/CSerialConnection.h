@@ -20,9 +20,9 @@ History:
 /********************************** System libs includes **************************/
 #include <string>
 
-namespace everest
+namespace dtfeverest
 {
-	namespace hwdrivers
+	namespace dtfhwdrivers
 	{
 		/* For connecting to devices through a serial port */
 		class CSerialConnection: public CDeviceConnection

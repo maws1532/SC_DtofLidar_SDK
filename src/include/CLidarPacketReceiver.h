@@ -25,9 +25,9 @@ History:
 #include <vector>
 #include <fstream>
 
-namespace everest
+namespace dtfeverest
 {
-	namespace hwdrivers
+	namespace dtfhwdrivers
 	{
         class CDeviceConnection;
 

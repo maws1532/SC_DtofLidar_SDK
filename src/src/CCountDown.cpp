@@ -24,8 +24,8 @@ History:
 
 /*********************************** Name space ***********************************/
 using namespace std;
-using namespace everest;
-using namespace everest::hwdrivers;
+using namespace dtfeverest;
+using namespace dtfeverest::dtfhwdrivers;
 
 /***********************************************************************************
 Function:     CCountDown

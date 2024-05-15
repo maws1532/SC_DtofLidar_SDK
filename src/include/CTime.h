@@ -22,9 +22,9 @@ History:
 
 #define INVALID_TIMESTAMP (0)
 
-namespace everest
+namespace dtfeverest
 {
-    namespace hwdrivers
+    namespace dtfhwdrivers
     {
         typedef uint64_t TTimeStamp;
 		struct TTimeParts

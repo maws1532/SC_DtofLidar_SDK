@@ -39,7 +39,7 @@ typedef struct _rslidar_data
 }RslidarDataComplete;
 
 using namespace std;
-using namespace everest::hwdrivers;
+using namespace dtfeverest::dtfhwdrivers;
 
 
 int main(int argc, char * argv[])

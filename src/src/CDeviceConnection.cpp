@@ -19,8 +19,8 @@ History:
 
 /*********************************** Name space ***********************************/
 using namespace std;
-using namespace everest;
-using namespace everest::hwdrivers;
+using namespace dtfeverest;
+using namespace dtfeverest::dtfhwdrivers;
 
 /********************************** Static varible init ***************************/
 bool CDeviceConnection::m_str_map_inited = false;
