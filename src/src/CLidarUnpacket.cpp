@@ -249,7 +249,7 @@ TToothScan CLidarUnpacket::unpacketNewLidarScanHasSingal(CLidarPacket &packet)
         // }
         
         tooth_scan.distance[i] = float(distance) / 4.0f / 1000.0f;
-        tooth_scan.signal[i] = int(signal);
+        tooth_scan.signal[i] = (((signal/16)*(distance/100)+10)*5>255)?255:u8(((signal/16)*(distance/100)+10)*5);
 
         if(tooth_scan.distance[i] > 0.15)//15cm
         {

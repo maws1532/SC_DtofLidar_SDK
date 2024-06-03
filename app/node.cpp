@@ -46,7 +46,7 @@ int main(int argc, char * argv[])
 {
     int count = 0;
 	int    opt_com_baudrate = 230400;//;
-    string opt_com_path = "/dev/ttyUSB3";
+    string opt_com_path = "/dev/ttyUSB0";
 
     CSerialConnection serial_connect;
     C3iroboticsLidar robotics_lidar;
