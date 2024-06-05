@@ -1,11 +1,19 @@
 # SC_DtofLidar_SDK
-1、单光子雷达SDK仓库
+state:
+1、2024/06/04 update
+
 Version:
-	tag1.0
+	tag v1.2
 state:
 1、First update
 
 Version:
-	tag1.1
+	tag v1.1
+ 
+state:
+1、单光子雷达SDK仓库
+Version:
+	tag v1.0
+
 state:
 1、Modifying namespace
