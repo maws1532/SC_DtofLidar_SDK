@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  C3iroboticsLidar.h
+File name:	  DTFC3iroboticsLidar.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-03
@@ -12,15 +12,15 @@ History:
 	Modification:
 ***********************************************************************************/
 
-#ifndef EVEREST_LIDAR_C3IROBOTICSLIDAR_H
-#define EVEREST_LIDAR_C3IROBOTICSLIDAR_H
+#ifndef EVEREST_LIDAR_DTFC3IROBOTICSLIDAR_H
+#define EVEREST_LIDAR_DTFC3IROBOTICSLIDAR_H
 
 /******************************* Current libs includes ****************************/
-#include "CLidarPacket.h"
-#include "CLidarUnpacket.h"
-#include "CLidarPacketReceiver.h"
-#include "CSerialConnection.h"
-#include "CSimulateSerial.h"
+#include "DTFCLidarPacket.h"
+#include "DTFCLidarUnpacket.h"
+#include "DTFCLidarPacketReceiver.h"
+#include "DTFCSerialConnection.h"
+#include "DTFCSimulateSerial.h"
 
 /******************************* System libs includes *****************************/
 #include <vector>
@@ -86,7 +86,7 @@ namespace dtfeverest
             TS12D_LIDAR_3_9_K,
         };
 
-		class C3iroboticsLidar
+		class DTFC3iroboticsLidar
 		{
             public:
                 enum TGrabScanState
@@ -101,13 +101,13 @@ namespace dtfeverest
                 };
 
                 /* Constructor */
-                C3iroboticsLidar();
+                DTFC3iroboticsLidar();
 
                 /* Destructor */
-                ~C3iroboticsLidar();
+                ~DTFC3iroboticsLidar();
 
                 /* Set device connect */
-                bool initilize(CDeviceConnection *device_connect);
+                bool initilize(DTFCDeviceConnection *device_connect);
 
                 /* Get scan data */
                 TLidarGrabResult getScanData();
@@ -158,7 +158,7 @@ namespace dtfeverest
                 int SetLidarExpectSpeed(double speed);
 
                 /*set scan error time*/
-                int ScanErrTimeOut(CLidarPacket *packet);
+                int ScanErrTimeOut(DTFCLidarPacket *packet);
 
                 /*control Lidar Pause*/
                 void ControlLidarPause();
@@ -201,19 +201,19 @@ namespace dtfeverest
 
             private:
                 /* Analysis packet */
-                TLidarGrabResult analysisPacket(CLidarPacket &lidar_packet);
+                TLidarGrabResult analysisPacket(DTFCLidarPacket &lidar_packet);
 
                 /* Analysis tooth scan */
-                TLidarGrabResult analysisToothScan(CLidarPacket &lidar_packet);
+                TLidarGrabResult analysisToothScan(DTFCLidarPacket &lidar_packet);
 
                 /* Analysis new tooth scan */
-                TLidarGrabResult analysisNewToothScan(CLidarPacket &lidar_packet);
+                TLidarGrabResult analysisNewToothScan(DTFCLidarPacket &lidar_packet);
 
                 /* Analysis health info */
-                TLidarGrabResult analysisHealthInfo(CLidarPacket &lidar_packet);
+                TLidarGrabResult analysisHealthInfo(DTFCLidarPacket &lidar_packet);
 
                 /* Analysis lidar speed */
-                TLidarGrabResult analysisLidarSpeed(CLidarPacket &lidar_packet);
+                TLidarGrabResult analysisLidarSpeed(DTFCLidarPacket &lidar_packet);
 
                 /* Reset scan grab */
                 void resetScanGrab();
@@ -270,8 +270,8 @@ namespace dtfeverest
                 std::string Lds_str;
                 TLidarVersion LidarV;
             private:
-                CDeviceConnection       *m_device_connect;
-                CLidarPacketReceiver    m_receiver;
+                DTFCDeviceConnection       *m_device_connect;
+                DTFCLidarPacketReceiver    m_receiver;
                 TParams                 m_params;
                 //TLidarScan              m_lidar_scan;
                 //TLidarError             m_lidar_erro;
@@ -280,7 +280,7 @@ namespace dtfeverest
                 int                     m_grab_scan_count;
                 int                     m_Shield_count;
                 float                   m_last_scan_angle;
-                CLidarPacket            m_packet;
+                DTFCLidarPacket            m_packet;
                 TToothScan              m_remainder_tooth_scan;
                 bool                    m_remainder_flag;
                 bool                    m_data_with_signal;
@@ -289,11 +289,11 @@ namespace dtfeverest
                 double                  m_current_lidar_speed;
                 double                  Expectspeed;
 
-                CCountDown              m_data_count_down;
-                CCountDown              m_speed_count_down;
-                CCountDown              m_stop_count_down;
-                CCountDown              m_Shield_count_down;
-                CCountDown              m_GetSNcount_down;
+                DTFCCountDown              m_data_count_down;
+                DTFCCountDown              m_speed_count_down;
+                DTFCCountDown              m_stop_count_down;
+                DTFCCountDown              m_Shield_count_down;
+                DTFCCountDown              m_GetSNcount_down;
                 //调整速度相关变量 
                 double  error;
                 double  last_error;

@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CArcTime.cpp
+File name:	  DTFCArcTime.cpp
 Author:       Shizhe
 Version:      V1.6.2
 Date:	 	  2016-3-2
@@ -11,8 +11,8 @@ History:
 	Author: Kimbo
 	Modification: Refactor this class
 ***********************************************************************************/
-#ifndef EVEREST_LIDAR_CARCTIME_H
-#define EVEREST_LIDAR_CARCTIME_H
+#ifndef EVEREST_LIDAR_DTFCARCTIME_H
+#define EVEREST_LIDAR_DTFCARCTIME_H
 
 /********************************** System libs includes **************************/
 #include <limits.h>
@@ -33,8 +33,8 @@ namespace dtfeverest
             The recommended methods to use are setToNow() to reset the time,
             mSecSince() to obtain the number of milliseconds elapsed since it was
             last reset (or secSince() if you don't need millisecond precision), and
-            mSecSince(CArcTime) or secSince(CArcTime) to find the difference between
-            two CArcTime objects.
+            mSecSince(DTFCArcTime) or secSince(DTFCArcTime) to find the difference between
+            two DTFCArcTime objects.
 
             On systems where it is supported this will use a monotonic clock,
             this is an ever increasing system that is not dependent on what
@@ -42,27 +42,27 @@ namespace dtfeverest
             used, but if the time is changed forwards or backwards then bad
             things can happen.  Windows uses a time since bootup, which
             functions the same as the monotonic clock anyways.  You can use
-            CArcTime::usingMonotonicClock() to see if this is being used.  Note
-            that an CArcTime will have had to have been set to for this to be a
+            DTFCArcTime::usingMonotonicClock() to see if this is being used.  Note
+            that an DTFCArcTime will have had to have been set to for this to be a
             good value... Cia::init does this however, so that should not be
             an issue.  It looks like the monotonic clocks won't work on linux
             kernels before 2.6.
         */
-        class CArcTime
+        class DTFCArcTime
         {
             public:
               /* Constructor. Time is initialized to the current time */
-              CArcTime() { setToNow(); }
+              DTFCArcTime() { setToNow(); }
 
               /* Copy constructor */
               //
-              CArcTime(const CArcTime &other) :
+              DTFCArcTime(const DTFCArcTime &other) :
                 m_Sec(other.m_Sec),
                 m_MSec(other.m_MSec)
               {}
 
               /* Assignment operator */
-              CArcTime &operator=(const CArcTime &other)
+              DTFCArcTime &operator=(const DTFCArcTime &other)
               {
                 if (this != &other) {
                   m_Sec = other.m_Sec;
@@ -72,10 +72,10 @@ namespace dtfeverest
               }
 
               /* Destructor */
-              ~CArcTime() {}
+              ~DTFCArcTime() {}
 
               /// Gets the number of milliseconds since the given timestamp to this one
-              long mSecSince(CArcTime since) const
+              long mSecSince(DTFCArcTime since) const
               {
                 long long ret = mSecSinceLL(since);
                 if (ret > INT_MAX)
@@ -92,7 +92,7 @@ namespace dtfeverest
                   */
               }
           /// Gets the number of milliseconds since the given timestamp to this one
-          long long mSecSinceLL(CArcTime since) const
+          long long mSecSinceLL(DTFCArcTime since) const
           {
             long long timeSince, timeThis;
 
@@ -101,26 +101,26 @@ namespace dtfeverest
             return timeSince - timeThis;
           }
           /// Gets the number of seconds since the given timestamp to this one
-          long secSince(CArcTime since) const
+          long secSince(DTFCArcTime since) const
           {
             return mSecSince(since)/1000;
           }
           /// Gets the number of seconds since the given timestamp to this one
-          long long secSinceLL(CArcTime since) const
+          long long secSinceLL(DTFCArcTime since) const
           {
             return mSecSinceLL(since)/1000;
           }
           /// Finds the number of millisecs from when this timestamp is set to to now (the inverse of mSecSince())
           long mSecTo(void) const
           {
-            CArcTime now;
+            DTFCArcTime now;
             now.setToNow();
             return -mSecSince(now);
           }
           /// Finds the number of millisecs from when this timestamp is set to to now (the inverse of mSecSince())
           long long mSecToLL(void) const
           {
-            CArcTime now;
+            DTFCArcTime now;
             now.setToNow();
             return -mSecSinceLL(now);
           }
@@ -137,14 +137,14 @@ namespace dtfeverest
           /// Finds the number of milliseconds from this timestamp to now
           long mSecSince(void) const
           {
-            CArcTime now;
+            DTFCArcTime now;
             now.setToNow();
             return mSecSince(now);
           }
           /// Finds the number of milliseconds from this timestamp to now
           long long mSecSinceLL(void) const
           {
-            CArcTime now;
+            DTFCArcTime now;
             now.setToNow();
             return mSecSinceLL(now);
           }
@@ -159,7 +159,7 @@ namespace dtfeverest
             return mSecSinceLL()/1000;
           }
           /// returns whether the given time is before this one or not
-          bool isBefore(CArcTime testTime) const
+          bool isBefore(DTFCArcTime testTime) const
           {
             if (mSecSince(testTime) < 0)
               return true;
@@ -167,7 +167,7 @@ namespace dtfeverest
             return false;
           }
           /// returns whether the given time is equal to this time or not
-          bool isAt(CArcTime testTime) const
+          bool isAt(DTFCArcTime testTime) const
           {
             if (mSecSince(testTime) == 0)
              return true;
@@ -175,7 +175,7 @@ namespace dtfeverest
               return false;
           }
           /// returns whether the given time is after this one or not
-          bool isAfter(CArcTime testTime) const
+          bool isAfter(DTFCArcTime testTime) const
           {
             if (mSecSince(testTime) > 0)
               return true;
@@ -193,7 +193,7 @@ namespace dtfeverest
             //if (ms < 0 && (unsigned)abs(ms) > timeThis)
             if (ms < 0 && -ms > timeThis)
             {
-//              CLog::log(CLog::Terse, "CArcTime::addMSec: tried to subtract too many milliseconds, would result in a negative time.");
+//              CLog::log(CLog::Terse, "DTFCArcTime::addMSec: tried to subtract too many milliseconds, would result in a negative time.");
               m_Sec = 0;
               m_MSec = 0;
               return false;
@@ -216,7 +216,7 @@ namespace dtfeverest
             //if (ms < 0 && (unsigned)abs(ms) > timeThis)
             if (ms < 0 && -ms > timeThis)
             {
-//              CLog::log(CLog::Terse, "CArcTime::addMSec: tried to subtract too many milliseconds, would result in a negative time.");
+//              CLog::log(CLog::Terse, "DTFCArcTime::addMSec: tried to subtract too many milliseconds, would result in a negative time.");
               m_Sec = 0;
               m_MSec = 0;
               return false;
@@ -269,18 +269,18 @@ namespace dtfeverest
           }
 
           /// Equality operator (for sets)
-          bool operator==(const CArcTime& other) const
+          bool operator==(const DTFCArcTime& other) const
           {
             return isAt(other);
           }
 
-          bool operator!=(const CArcTime& other) const
+          bool operator!=(const DTFCArcTime& other) const
           {
             return (!isAt(other));
           }
 
           // Less than operator for sets
-          bool operator<(const CArcTime& other) const
+          bool operator<(const DTFCArcTime& other) const
           {
             return isBefore(other);
           } // end operator <

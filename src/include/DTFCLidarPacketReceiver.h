@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  CLidarPacketReceiver.h
+File name:	  DTFCLidarPacketReceiver.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-03
@@ -11,15 +11,15 @@ History:
 	Author:
 	Modification:
 ***********************************************************************************/
-#ifndef EVEREST_LIDAR_CLIDARPACKETRECEIVER_H
-#define EVEREST_LIDAR_CLIDARPACKETRECEIVER_H
+#ifndef EVEREST_LIDAR_DTFCLIDARPACKETRECEIVER_H
+#define EVEREST_LIDAR_DTFCLIDARPACKETRECEIVER_H
 
 /******************************* Current libs includes ****************************/
-#include "CLidarPacket.h"
-#include "CLidarUnpacket.h"
+#include "DTFCLidarPacket.h"
+#include "DTFCLidarUnpacket.h"
 
 /******************************* Current libs includes ****************************/
-#include "CCountDown.h"
+#include "DTFCCountDown.h"
 
 /******************************* System libs includes *****************************/
 #include <vector>
@@ -29,25 +29,25 @@ namespace dtfeverest
 {
 	namespace dtfhwdrivers
 	{
-        class CDeviceConnection;
+        class DTFCDeviceConnection;
 
-		class CLidarPacketReceiver
+		class DTFCLidarPacketReceiver
 		{
             public:
                 /* Constructor */
-                CLidarPacketReceiver();
+                DTFCLidarPacketReceiver();
 
                 /* Destructor */
-                ~CLidarPacketReceiver();
+                ~DTFCLidarPacketReceiver();
 
                 /* Receive lidar packet, if return true, it means receive a valid packet */
-                bool receivePacket(CLidarPacket *packet);
+                bool receivePacket(DTFCLidarPacket *packet);
 
 				/* Sets the device this instance receives packets from */
-				void setDeviceConnection(CDeviceConnection *device_connection) { m_device_conn = device_connection; }
+				void setDeviceConnection(DTFCDeviceConnection *device_connection) { m_device_conn = device_connection; }
 
 				/* Gets the device this instance receives packets from */
-				CDeviceConnection *getDeviceConnection(void)  { return m_device_conn; }
+				DTFCDeviceConnection *getDeviceConnection(void)  { return m_device_conn; }
 
                 enum TState
                 {
@@ -84,19 +84,19 @@ namespace dtfeverest
 
 			private:
 				/* Read packet, if it return ture, it means read complete packet */
-				TPacketResult readPacket(CLidarPacket *packet, u8 ch);
+				TPacketResult readPacket(DTFCLidarPacket *packet, u8 ch);
 
 				/* process state header1 */
-				TPacketResult processStateHeader1(CLidarPacket *packet, u8 ch);
+				TPacketResult processStateHeader1(DTFCLidarPacket *packet, u8 ch);
 
 				/* process state header2 */
-				TPacketResult processStateHeader2(CLidarPacket *packet, u8 ch);
+				TPacketResult processStateHeader2(DTFCLidarPacket *packet, u8 ch);
 
 				/* Process state length */
-				TPacketResult processStateLength(CLidarPacket *packet, u8 ch);
+				TPacketResult processStateLength(DTFCLidarPacket *packet, u8 ch);
 
 				/* Process acuquire data */
-				TPacketResult processStateAcquireData(CLidarPacket *packet, u8 ch);
+				TPacketResult processStateAcquireData(DTFCLidarPacket *packet, u8 ch);
 
                 void reset();
 
@@ -119,11 +119,11 @@ namespace dtfeverest
                 };
 
             private:
-                CDeviceConnection 	*m_device_conn;
-                CCountDown          m_count_down;
-                CCountDown          Timeout_Data_Wrong;
+                DTFCDeviceConnection 	*m_device_conn;
+                DTFCCountDown          m_count_down;
+                DTFCCountDown          Timeout_Data_Wrong;
                 bool                m_error_Data_Wrong;
-                CCountDown          Timeout_CRC;
+                DTFCCountDown          Timeout_CRC;
                 bool                m_error_crc;
                 TParams             m_params;
                 TState              m_state;

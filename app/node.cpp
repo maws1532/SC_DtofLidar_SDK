@@ -10,8 +10,8 @@
 */
 
 
-#include "C3iroboticsLidar.h"
-#include "CSerialConnection.h"
+#include "DTFC3iroboticsLidar.h"
+#include "DTFCSerialConnection.h"
 #include <unistd.h>
 #include <time.h>
 #include <stdlib.h>
@@ -46,11 +46,11 @@ int main(int argc, char * argv[])
 {
     int count = 0;
 	int    opt_com_baudrate = 230400;//;
-    string opt_com_path = "/dev/ttyUSB0";
+    string opt_com_path = "/dev/ttyUSB3";
 
-    CSerialConnection serial_connect;
-    C3iroboticsLidar robotics_lidar;
-    CLidarUnpacket unpacket;
+    DTFCSerialConnection serial_connect;
+    DTFC3iroboticsLidar robotics_lidar;
+    DTFCLidarUnpacket unpacket;
 
     robotics_lidar.PwmInit(robotics_lidar.NORMAL);//PWM init
 

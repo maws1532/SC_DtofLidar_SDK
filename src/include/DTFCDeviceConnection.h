@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CDeviceConnection.h
+File name:	  DTFCDeviceConnection.h
 Author:       Shizhe
 Version:      V1.6.1
 Date:	 	  2016-3-2
@@ -11,8 +11,8 @@ History:
 	Author: Kimbo
 	Modification: Refactor this class
 ***********************************************************************************/
-#ifndef EVEREST_LIDAR_DEVICECONNECTION_H_
-#define EVEREST_LIDAR_DEVICECONNECTION_H_
+#ifndef EVEREST_LIDAR_DTFDEVICECONNECTION_H_
+#define EVEREST_LIDAR_DTFDEVICECONNECTION_H_
 
 /********************************** Current libs includes *************************/
 
@@ -48,7 +48,7 @@ namespace dtfeverest
 		*/
 		typedef std::map<int, std::string> CStrMap;
 
-		class CDeviceConnection
+		class DTFCDeviceConnection
 		{
 			public:
 			  enum Status
@@ -61,10 +61,10 @@ namespace dtfeverest
 			  };
 
 			  /* Constructor */
-			  CDeviceConnection();
+			  DTFCDeviceConnection();
 
 			  /* Destructor also forces a close on the connection */
-			  virtual ~CDeviceConnection();
+			  virtual ~DTFCDeviceConnection();
 
 			  /* Reads data from connection */
 			  virtual int read(const char *data, unsigned int size,

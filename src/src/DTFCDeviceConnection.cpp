@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CDeviceConnection.cpp
+File name:	  DTFCDeviceConnection.cpp
 Author:       Shizhe
 Version:      V1.6.1
 Date:	 	  2016-3-2
@@ -13,7 +13,7 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include <CDeviceConnection.h>
+#include <DTFCDeviceConnection.h>
 
 /********************************** Current libs includes *************************/
 
@@ -23,18 +23,18 @@ using namespace dtfeverest;
 using namespace dtfeverest::dtfhwdrivers;
 
 /********************************** Static varible init ***************************/
-bool CDeviceConnection::m_str_map_inited = false;
-CStrMap CDeviceConnection::m_str_map;
+bool DTFCDeviceConnection::m_str_map_inited = false;
+CStrMap DTFCDeviceConnection::m_str_map;
 
 /***********************************************************************************
-Function:     CDeviceConnection
-Description:  The constructor of CDeviceConnection
+Function:     DTFCDeviceConnection
+Description:  The constructor of DTFCDeviceConnection
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CDeviceConnection::CDeviceConnection()
+DTFCDeviceConnection::DTFCDeviceConnection()
 {
 	if (!m_str_map_inited)
 	{
@@ -48,14 +48,14 @@ CDeviceConnection::CDeviceConnection()
 }
 
 /***********************************************************************************
-Function:     ~CDeviceConnection
-Description:  The destructor of CDeviceConnection
+Function:     ~DTFCDeviceConnection
+Description:  The destructor of DTFCDeviceConnection
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CDeviceConnection::~CDeviceConnection()
+DTFCDeviceConnection::~DTFCDeviceConnection()
 {
 	close();
 }
@@ -68,7 +68,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CDeviceConnection::buildStrMap(void)
+void DTFCDeviceConnection::buildStrMap(void)
 {
 	m_str_map[STATUS_NEVER_OPENED] = "never opened";
 	m_str_map[STATUS_OPEN] = "open";
@@ -85,7 +85,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-const char * CDeviceConnection::getStatusMessage(int messageNumber) const
+const char * DTFCDeviceConnection::getStatusMessage(int messageNumber) const
 {
 	CStrMap::const_iterator it;
 	if ((it = m_str_map.find(messageNumber)) != m_str_map.end())
@@ -106,7 +106,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CDeviceConnection::setPortName(const char *portName)
+void DTFCDeviceConnection::setPortName(const char *portName)
 {
 	if (portName != NULL)
 	{
@@ -126,7 +126,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-const char *CDeviceConnection::getPortName(void) const
+const char *DTFCDeviceConnection::getPortName(void) const
 {
 	return m_dc_port_name.c_str();
 }
@@ -139,7 +139,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CDeviceConnection::setPortType(const char *portType)
+void DTFCDeviceConnection::setPortType(const char *portType)
 {
 	if (portType != NULL)
 	{
@@ -161,7 +161,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-const char *CDeviceConnection::getPortType(void) const
+const char *DTFCDeviceConnection::getPortType(void) const
 {
 	return m_dc_port_type.c_str();
 }
@@ -174,7 +174,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CDeviceConnection::setDeviceName(const char *device_name)
+void DTFCDeviceConnection::setDeviceName(const char *device_name)
 {
 	if (device_name != NULL)
 	{
@@ -194,7 +194,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-const char *CDeviceConnection::getDeviceName(void) const
+const char *DTFCDeviceConnection::getDeviceName(void) const
 {
 	return m_dc_device_name.c_str();
 }

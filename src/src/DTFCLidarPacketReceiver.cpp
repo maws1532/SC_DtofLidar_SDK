@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  CLidarPacketReceiver.h
+File name:	  DTFCLidarPacketReceiver.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-03
@@ -13,11 +13,11 @@ History:
 ***********************************************************************************/
 
 /********************************* File includes **********************************/
-#include "CLidarPacketReceiver.h"
+#include "DTFCLidarPacketReceiver.h"
 
 /******************************* Current libs includes ****************************/
-#include "CDeviceConnection.h"
-#include "CCountDown.h"
+#include "DTFCDeviceConnection.h"
+#include "DTFCCountDown.h"
 
 /********************************** Name space ************************************/
 using namespace dtfeverest;
@@ -27,14 +27,14 @@ using namespace dtfeverest::dtfhwdrivers;
 #define LIDAR_PACEKT_HEADER2 0x00
 
 /***********************************************************************************
-Function:     CLidarPacketReceiver
-Description:  The constructor of CLidarPacketReceiver
+Function:     DTFCLidarPacketReceiver
+Description:  The constructor of DTFCLidarPacketReceiver
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::CLidarPacketReceiver()
+DTFCLidarPacketReceiver::DTFCLidarPacketReceiver()
 {
     m_device_conn = NULL;
     m_log_when_receive_time_over = false;
@@ -44,14 +44,14 @@ CLidarPacketReceiver::CLidarPacketReceiver()
 }
 
 /***********************************************************************************
-Function:     CLidarPacketReceiver
-Description:  The destructor of CLidarPacketReceiver
+Function:     DTFCLidarPacketReceiver
+Description:  The destructor of DTFCLidarPacketReceiver
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::~CLidarPacketReceiver()
+DTFCLidarPacketReceiver::~DTFCLidarPacketReceiver()
 {
     if(m_save_fp)
     {
@@ -67,12 +67,12 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CLidarPacketReceiver::receivePacket(CLidarPacket *packet)
+bool DTFCLidarPacketReceiver::receivePacket(DTFCLidarPacket *packet)
 {
 	/* Judge whether serial is connecting */
-	if (packet == NULL || m_device_conn == NULL || m_device_conn->getStatus() != CDeviceConnection::STATUS_OPEN)
+	if (packet == NULL || m_device_conn == NULL || m_device_conn->getStatus() != DTFCDeviceConnection::STATUS_OPEN)
 	{
-		printf("[CLidarPacketReceiver] receivePacket: connection not open!\n");
+		printf("[DTFCLidarPacketReceiver] receivePacket: connection not open!\n");
 		return false;
 	}
     /* Read packet */
@@ -82,12 +82,12 @@ bool CLidarPacketReceiver::receivePacket(CLidarPacket *packet)
 	{
 		if(m_count_down.isEnd())
 		{
-			//printf("[CLidarPacketReceiver] Receive packet time %5.2f ms is over!\n", m_count_down.getInputTime());
+			//printf("[DTFCLidarPacketReceiver] Receive packet time %5.2f ms is over!\n", m_count_down.getInputTime());
             printf("(LINE:%d)-<FUNCTION:%s> revice data over\n",__LINE__,__FUNCTION__);
             packet->m_lidar_erro = LIDAR_ERROR_TIME_OVER;
 			if(m_log_when_receive_time_over)
             {
-                printf("[CLidarPacketReceiver] Receive packet time is over!\n");
+                printf("[DTFCLidarPacketReceiver] Receive packet time is over!\n");
             }
             TPacketResult packet_result = readPacket(packet, ch);
 			return false;
@@ -108,7 +108,7 @@ bool CLidarPacketReceiver::receivePacket(CLidarPacket *packet)
 		}
 		else if(read_bytes < 0)
 		{
-		    printf("[CLidarPacketReceiver] finish read data read bytes is %d!\n", read_bytes);
+		    printf("[DTFCLidarPacketReceiver] finish read data read bytes is %d!\n", read_bytes);
 		    return false;
 		}
 		else
@@ -131,7 +131,7 @@ bool CLidarPacketReceiver::receivePacket(CLidarPacket *packet)
 		}
 	}
 
-	printf("[CLidarPacketReceiver] It should not come to here!\n");
+	printf("[DTFCLidarPacketReceiver] It should not come to here!\n");
 	return false;
 }
 
@@ -144,7 +144,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::readPacket(CLidarPacket *packet, u8 ch)
+DTFCLidarPacketReceiver::TPacketResult DTFCLidarPacketReceiver::readPacket(DTFCLidarPacket *packet, u8 ch)
 {
     TPacketResult packet_result = PACKET_ING;
     switch(m_state)
@@ -154,7 +154,7 @@ CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::readPacket(CLidarPacke
         case STATE_LENGHT: packet_result =  processStateLength(packet, ch); break;
         case STATE_ACQUIRE_DATA: packet_result = processStateAcquireData(packet, ch); break;
         default:
-            printf("[CLidarPacketReceiver] Enter erro state %d!\n", m_state);
+            printf("[DTFCLidarPacketReceiver] Enter erro state %d!\n", m_state);
         break;
     }
     return packet_result;
@@ -168,7 +168,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::processStateHeader1(CLidarPacket *packet, u8 ch)
+DTFCLidarPacketReceiver::TPacketResult DTFCLidarPacketReceiver::processStateHeader1(DTFCLidarPacket *packet, u8 ch)
 {
     if(ch == LIDAR_PACEKT_HEADER1)
     {
@@ -198,7 +198,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::processStateHeader2(CLidarPacket *packet, u8 ch)
+DTFCLidarPacketReceiver::TPacketResult DTFCLidarPacketReceiver::processStateHeader2(DTFCLidarPacket *packet, u8 ch)
 {
     if(ch == LIDAR_PACEKT_HEADER2)
     {
@@ -219,7 +219,7 @@ CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::processStateHeader2(CL
         if(GetSN_ING == GetSNFlag())
             return PACKET_FAILED;
         
-        printf("[CLidarPacketReceiver] Find erro header2 0x%x!\n", ch);
+        printf("[DTFCLidarPacketReceiver] Find erro header2 0x%x!\n", ch);
     }
     return PACKET_ING;
 }
@@ -232,7 +232,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::processStateLength(CLidarPacket *packet, u8 ch)
+DTFCLidarPacketReceiver::TPacketResult DTFCLidarPacketReceiver::processStateLength(DTFCLidarPacket *packet, u8 ch)
 {
 #if 1
     /* Limit packet length */
@@ -241,7 +241,7 @@ CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::processStateLength(CLi
         reset();
         if(GetSN_ING == GetSNFlag())
             return PACKET_FAILED;
-        printf("[CLidarPacketReceiver] Find erro length is 0x%x!\n", (ch));
+        printf("[DTFCLidarPacketReceiver] Find erro length is 0x%x!\n", (ch));
         return PACKET_ING;
     }
 #endif
@@ -263,7 +263,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::TPacketResult CLidarPacketReceiver::processStateAcquireData(CLidarPacket *packet, u8 ch)
+DTFCLidarPacketReceiver::TPacketResult DTFCLidarPacketReceiver::processStateAcquireData(DTFCLidarPacket *packet, u8 ch)
 {
     m_actual_count++;
     packet->pushBack(ch);
@@ -300,7 +300,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CLidarPacketReceiver::reset()
+void DTFCLidarPacketReceiver::reset()
 {
     m_state = STATE_HEADER1;
     m_actual_count = 0;
@@ -314,7 +314,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CLidarPacketReceiver::SetSNFlag(SNState state)
+void DTFCLidarPacketReceiver::SetSNFlag(SNState state)
 {
         m_SNState = state;
 
@@ -327,7 +327,7 @@ Output:       SNState
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacketReceiver::SNState CLidarPacketReceiver::GetSNFlag()
+DTFCLidarPacketReceiver::SNState DTFCLidarPacketReceiver::GetSNFlag()
 {
         return m_SNState;
 

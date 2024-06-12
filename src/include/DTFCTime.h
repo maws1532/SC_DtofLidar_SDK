@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CTime.h
+File name:	  DTFCTime.h
 Author:       Kimbo
 Version:      V1.5.0
 Date:	 	  2016-4-25
@@ -12,8 +12,8 @@ History:
 	Modification:
 ***********************************************************************************/
 
-#ifndef EVEREST_LIDAR_CTIME_H_
-#define EVEREST_LIDAR_CTIME_H_
+#ifndef EVEREST_LIDAR_DTFCTIME_H_
+#define EVEREST_LIDAR_DTFCTIME_H_
 
 
 /********************************** System includes *******************************/
@@ -39,14 +39,14 @@ namespace dtfeverest
 			int			daylight_saving;
 		};
 
-        class CTime
+        class DTFCTime
         {
             public:
                 /* Constructor */
-                CTime();
+                DTFCTime();
 
                 /* Destructor */
-                ~CTime();
+                ~DTFCTime();
 
                 /* Add time */
                 static TTimeStamp addTime(TTimeStamp time, double time_ms);

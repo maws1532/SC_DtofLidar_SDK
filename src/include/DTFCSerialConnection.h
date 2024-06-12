@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CSimulateSerial.h
+File name:	  DTFCSerialConnection.h
 Author:       Shizhe
 Version:      V1.6.1
 Date:	 	  2016-3-2
@@ -11,38 +11,40 @@ History:
 	Author: Kimbo
 	Modification: Refactor this class
 ***********************************************************************************/
-#ifndef EVEREST_HWDRIVERS_CSIMULATESERIAL_H_
-#define EVEREST_HWDRIVERS_CSIMULATESERIAL_H_
+#ifndef EVEREST_HWDRIVERS_DTFCSERIALCONNECTION_H_
+#define EVEREST_HWDRIVERS_DTFCSERIALCONNECTION_H_
 
 /********************************** Current libs includes *************************/
-#include "CDeviceConnection.h"
+#include "DTFCDeviceConnection.h"
 
 /********************************** System libs includes **************************/
 #include <string>
-#include <fstream>
 
 namespace dtfeverest
 {
 	namespace dtfhwdrivers
 	{
 		/* For connecting to devices through a serial port */
-		class CSimulateSerial: public CDeviceConnection
+		class DTFCSerialConnection: public DTFCDeviceConnection
 		{
 			public:
 				/* Constructor */
-				CSimulateSerial();
+				DTFCSerialConnection();
 
 				/* Destructor also closes the connection */
-				virtual ~CSimulateSerial();
+				virtual ~DTFCSerialConnection();
 
-				/* Opens simulate, input file path */
+				/* Opens the serial port */
 				int open(const char * port = NULL);
+
+                /* Close */
+				void closeSerial();
 
 				/* Sets the port this connection will use */
 				void setPort(const char *port = NULL);
 
 				/* 	Gets the port this is using */
-				const char* getPort(void);
+				const char * getPort(void);
 
 				virtual bool openSimple(void);
 
@@ -54,16 +56,37 @@ namespace dtfeverest
 
 				virtual int write(const char *data, unsigned int size);
 
-				virtual const char* getOpenMessage(int messageNumber) { return m_str_map[messageNumber].c_str(); }
-
-				/* Internal open, for use by open and openSimple */
-				int internalOpen(void);
+				virtual const char * getOpenMessage(int messageNumber);
 
 				/* Sets the baud rate on the connection */
 				bool setBaud(int baud);
 
 				/* Gets what the current baud rate is set to */
 				int getBaud(void);
+
+				/* Sets whether to enable or disable the hardware control lines */
+				bool setHardwareControl(bool hardwareControl);
+
+				/* Gets whether the hardware control lines are enabled or disabled */
+				bool getHardwareControl(void);
+
+				/* Sees how the CTS line is set (true = high) */
+				bool getCTS(void);
+
+				/* Sees how the DSR line is set (true = high) */
+				bool getDSR(void);
+
+				/* Sees how the DCD line is set (true = high) */
+				bool getDCD(void);
+
+				/* Sees how the Ring line is set (true = high) */
+				bool getRing(void);
+
+				/* Internal open, for use by open and openSimple */
+				int internalOpen(void);
+
+
+				int set_opt(int fd,int nSpeed, int nBits, char nEvent, int nStop);
 
 				enum Open
 				{
@@ -85,11 +108,13 @@ namespace dtfeverest
 				void startTimeStamping(void);
 
 			protected:
-                CStrMap 		m_str_map;
+//				CStrMap 		m_str_map;
+                bool            m_taking_timestamps;
 				std::string 	m_port_name;
 				int 			m_baud_rate;
 				int 			m_status;
-				std::ifstream   m_fp;
+				bool 			m_hardware_control;
+				int 			m_port;
 		};
 	}
 }

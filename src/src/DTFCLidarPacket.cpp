@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  CLidarPacket.cpp
+File name:	  DTFCLidarPacket.cpp
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-04
@@ -13,10 +13,10 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include "CLidarPacket.h"
+#include "DTFCLidarPacket.h"
 
 /********************************** Current libs includes *************************/
-#include "C3iroboticsLidarProtocol.h"
+#include "DTFC3iroboticsLidarProtocol.h"
 
 /********************************** System includes *******************************/
 #include <string.h>
@@ -29,14 +29,14 @@ using namespace dtfeverest;
 using namespace dtfeverest::dtfhwdrivers;
 
 /***********************************************************************************
-Function:     CLidarPacket
+Function:     DTFCLidarPacket
 Description:  The constructor of CLidarPacket
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarPacket::CLidarPacket()
+DTFCLidarPacket::DTFCLidarPacket()
 {
 	reset();
 	m_error_crc = false;
@@ -50,7 +50,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CLidarPacket::reset()
+void DTFCLidarPacket::reset()
 {
     m_buf.resize(m_params.buf_size);
     m_read_length = 0;
@@ -66,11 +66,11 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CLidarPacket::hasWriteCapacity(int bytes)
+bool DTFCLidarPacket::hasWriteCapacity(int bytes)
 {
 	if (bytes < 0)
 	{
-	    printf("[CLidarPacket] You should input bytes %d less than 0!\n", bytes);
+	    printf("[DTFCLidarPacket] You should input bytes %d less than 0!\n", bytes);
 		return false;
 	}
 
@@ -93,7 +93,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CLidarPacket::pushBack(u8 ch)
+void DTFCLidarPacket::pushBack(u8 ch)
 {
 	if(!hasWriteCapacity(1))
 	{
@@ -111,7 +111,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u16 CLidarPacket::calcCheckSum(u8 *start_bytes, u16 num_bytes)
+u16 DTFCLidarPacket::calcCheckSum(u8 *start_bytes, u16 num_bytes)
 {
 	u8  uchCRCHi = 0xFF;                        // CRC高字节的初始化
 	u8  uchCRCLo = 0xFF;                        // CRC低字节的初始化
@@ -132,7 +132,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u16 CLidarPacket::calcCheckSum_Xor(u8 *start_bytes, u16 num_bytes)
+u16 DTFCLidarPacket::calcCheckSum_Xor(u8 *start_bytes, u16 num_bytes)
 {
 	u16 checksum = 0;                             // Checksum
 	while (num_bytes--)
@@ -150,7 +150,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CLidarPacket::verifyCheckSum(u8 ProtoType)
+bool DTFCLidarPacket::verifyCheckSum(u8 ProtoType)
 {
     if (m_length < m_params.least_packet_len)
     {
@@ -169,7 +169,7 @@ bool CLidarPacket::verifyCheckSum(u8 ProtoType)
 		caculate = calcCheckSum_Xor(&m_buf[0], m_length - 2);
 
 #if 0
-    printf("[CLidarPacket] m_length %d CRC 0x%X 0x%X, receive CRC %d, caculate CRC %d!\n",
+    printf("[DTFCLidarPacket] m_length %d CRC 0x%X 0x%X, receive CRC %d, caculate CRC %d!\n",
               m_length, c2, c1, chksum, caculate);
 #endif
     if (chksum == caculate)
@@ -191,7 +191,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u16 CLidarPacket::getParamLength()
+u16 DTFCLidarPacket::getParamLength()
 {
     if(isValid())
     {
@@ -211,7 +211,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u16 CLidarPacket::bufToUByte2(u8 *src_ptr)
+u16 DTFCLidarPacket::bufToUByte2(u8 *src_ptr)
 {
     u16 data = (src_ptr[0] << 8) | ((u8)src_ptr[1]);
     return data;
@@ -225,7 +225,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-s16 CLidarPacket::bufToByte2(u8 *src_ptr)
+s16 DTFCLidarPacket::bufToByte2(u8 *src_ptr)
 {
     s16 data = (src_ptr[0] << 8) | ((s8)src_ptr[1]);
     return data;
@@ -239,7 +239,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u8 CLidarPacket::bufToUByte(u8 *src_ptr)
+u8 DTFCLidarPacket::bufToUByte(u8 *src_ptr)
 {
     u8 data = src_ptr[0];
     return data;
@@ -253,9 +253,9 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CLidarPacket::bufferToData(void *dest_ptr, void *src_ptr, size_t length)
+void DTFCLidarPacket::bufferToData(void *dest_ptr, void *src_ptr, size_t length)
 {
-    printf("[CLidarPacket] It has not realize now!\n");
+    printf("[DTFCLidarPacket] It has not realize now!\n");
 }
 
 /***********************************************************************************
@@ -266,7 +266,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CLidarPacket::printHex()
+void DTFCLidarPacket::printHex()
 {
     printf("[CRobotPacket] length %d, read_length %d!\n",
               m_length, m_read_length);

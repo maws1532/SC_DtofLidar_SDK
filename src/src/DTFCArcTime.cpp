@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CDeviceConnection.cpp
+File name:	  DTFCArcTime.cpp
 Author:       Shizhe
 Version:      V1.6.2
 Date:	 	  2016-3-2
@@ -13,7 +13,7 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include "CArcTime.h"
+#include "DTFCArcTime.h"
 
 /******************************* System libs includes *****************************/
 #include <time.h>
@@ -24,18 +24,18 @@ using namespace dtfeverest::dtfhwdrivers;
 
 /************************* Static varible init*************************************/
 #if defined(_POSIX_TIMERS) && defined(_POSIX_MONOTONIC_CLOCK)
-bool      CArcTime::ourMonotonicClock;
+bool      DTFCArcTime::ourMonotonicClock;
 #endif
 
 /***********************************************************************************
-Function:     CArcTime
-Description:  The constructor of CArcTime
+Function:     DTFCArcTime
+Description:  The constructor of DTFCArcTime
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CArcTime::setToNow(void)
+void DTFCArcTime::setToNow(void)
 {
 // if we have the best way of finding time use that
 #if defined(_POSIX_TIMERS) && defined(_POSIX_MONOTONIC_CLOCK)

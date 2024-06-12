@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CCountDown.cpp
+File name:	  DTFCCountDown.cpp
 Author:       Kimbo
 Version:      V1.5.0
 Date:	 	  2016-4-25
@@ -13,10 +13,10 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include "CCountDown.h"
+#include "DTFCCountDown.h"
 
 /******************************* Current libs includes ****************************/
-#include "CTime.h"
+#include "DTFCTime.h"
 
 /******************************* System libs includes *****************************/
 #include <iostream>
@@ -28,14 +28,14 @@ using namespace dtfeverest;
 using namespace dtfeverest::dtfhwdrivers;
 
 /***********************************************************************************
-Function:     CCountDown
+Function:     DTFCCountDown
 Description:  The constructor of Count down count
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CCountDown::CCountDown()
+DTFCCountDown::DTFCCountDown()
 {
     m_end_time = INVALID_TIMESTAMP;
     m_end_flag = false;
@@ -43,14 +43,14 @@ CCountDown::CCountDown()
 }
 
 /***********************************************************************************
-Function:     CCountDown
+Function:     DTFCCountDown
 Description:  The constructor of Count down count
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CCountDown::CCountDown(double time_ms)
+DTFCCountDown::DTFCCountDown(double time_ms)
 {
     m_end_time = INVALID_TIMESTAMP;
     m_end_flag = false;
@@ -58,14 +58,14 @@ CCountDown::CCountDown(double time_ms)
 }
 
 /***********************************************************************************
-Function:     ~CCountDown
+Function:     ~DTFCCountDown
 Description:  The destructor of file path class
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CCountDown::~CCountDown()
+DTFCCountDown::~DTFCCountDown()
 {
 
 }
@@ -78,11 +78,11 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CCountDown::setTime(double time_ms)
+void DTFCCountDown::setTime(double time_ms)
 {
     m_end_flag = false;
     m_time_ms = time_ms;
-    m_end_time = CTime::addTime(CTime::getCpuTime(), time_ms);
+    m_end_time = DTFCTime::addTime(DTFCTime::getCpuTime(), time_ms);
 }
 
 /***********************************************************************************
@@ -93,9 +93,9 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CCountDown::isEnd() const
+bool DTFCCountDown::isEnd() const
 {
-    return CTime::getCpuTime() > m_end_time? true: false;
+    return DTFCTime::getCpuTime() > m_end_time? true: false;
 }
 
 /***********************************************************************************
@@ -106,15 +106,15 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-double CCountDown::getLeftTime() const
+double DTFCCountDown::getLeftTime() const
 {
     if(m_end_time != INVALID_TIMESTAMP)
     {
-        return isEnd()? 0 : CTime::timeDifference(CTime::getCpuTime(), m_end_time);
+        return isEnd()? 0 : DTFCTime::timeDifference(DTFCTime::getCpuTime(), m_end_time);
     }
     else
     {
-        printf("[CCountDown] end time is INVALID_TIMESTAMP!\n");
+        printf("[DTFCCountDown] end time is INVALID_TIMESTAMP!\n");
         return -1.0;
     }
 }

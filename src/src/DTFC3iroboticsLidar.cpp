@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  C3iroboticsLidar.h
+File name:	  DTFC3iroboticsLidar.cpp
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-03
@@ -13,7 +13,7 @@ History:
 ***********************************************************************************/
 #define DEBUG
 /********************************* File includes **********************************/
-#include "C3iroboticsLidar.h"
+#include "DTFC3iroboticsLidar.h"
 
 /******************************* Current libs includes ****************************/
 #include <iostream>
@@ -31,16 +31,16 @@ using namespace dtfeverest;
 using namespace dtfeverest::dtfhwdrivers;
 
 /***********************************************************************************
-Function:     C3iroboticsLidar
-Description:  The constructor of C3iroboticsLidar
+Function:     DTFC3iroboticsLidar
+Description:  The constructor of DTFC3iroboticsLidar
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-C3iroboticsLidar::C3iroboticsLidar()
+DTFC3iroboticsLidar::DTFC3iroboticsLidar()
 {
-    SDKVersion = "V1.2"; 
+    SDKVersion = "V1.3"; 
     m_device_connect = NULL;
     m_data_with_signal = true;
     m_receive_lidar_speed = false;
@@ -70,16 +70,16 @@ C3iroboticsLidar::C3iroboticsLidar()
 }
 
 /***********************************************************************************
-Function:     C3iroboticsLidar
-Description:  The destructor of C3iroboticsLidar
+Function:     DTFC3iroboticsLidar
+Description:  The destructor of DTFC3iroboticsLidar
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-C3iroboticsLidar::~C3iroboticsLidar()
+DTFC3iroboticsLidar::~DTFC3iroboticsLidar()
 {
-    printf("~C3iroboticsLidar\n");
+    printf("~DTFC3iroboticsLidar\n");
 }
 /***********************************************************************************
 Function:     initilize
@@ -89,16 +89,16 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool C3iroboticsLidar::initilize(CDeviceConnection *device_connect)
+bool DTFC3iroboticsLidar::initilize(DTFCDeviceConnection *device_connect)
 {
-    if(device_connect == NULL || device_connect->getStatus() != CDeviceConnection::STATUS_OPEN)
+    if(device_connect == NULL || device_connect->getStatus() != DTFCDeviceConnection::STATUS_OPEN)
     {
-        printf("[C3iroboticsLidar] Init failed Can not open device connect!\n");
+        printf("[DTFC3iroboticsLidar] Init failed Can not open device connect!\n");
         return false;
     }
     else
     {
-        printf("[C3iroboticsLidar] Init device connect sucessful!\n");
+        printf("[DTFC3iroboticsLidar] Init device connect sucessful!\n");
         m_receiver.setDeviceConnection(device_connect);
         return true;
     }
@@ -111,7 +111,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int C3iroboticsLidar::ScanErrTimeOut(CLidarPacket *packet)
+int DTFC3iroboticsLidar::ScanErrTimeOut(DTFCLidarPacket *packet)
 {
 
     if(LIDAR_ERROR_TIME_OVER == packet->m_lidar_erro)
@@ -172,7 +172,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::getScanData()
+TLidarGrabResult DTFC3iroboticsLidar::getScanData()
 {
     TLidarGrabResult grab_result;
     while(1)
@@ -181,7 +181,7 @@ TLidarGrabResult C3iroboticsLidar::getScanData()
 
         if(m_remainder_flag)
         {
-            printf("[C3iroboticsLidar] Handle remainer scan!\n");
+            printf("[DTFC3iroboticsLidar] Handle remainer scan!\n");
             resetScanGrab();
             combineScan(m_remainder_tooth_scan);
         }
@@ -210,7 +210,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::analysisPacket(CLidarPacket &lidar_packet)
+TLidarGrabResult DTFC3iroboticsLidar::analysisPacket(DTFCLidarPacket &lidar_packet)
 {
     TLidarCommandID command_id = TLidarCommandID(lidar_packet.getCommandID());
     switch(command_id)
@@ -220,7 +220,7 @@ TLidarGrabResult C3iroboticsLidar::analysisPacket(CLidarPacket &lidar_packet)
         case I3LIDAR_LIDAR_SPEED: return analysisLidarSpeed(lidar_packet);
         case I3LIDAR_NEW_DISTANCE : return analysisNewToothScan(lidar_packet);
         default:
-            printf("[C3iroboticsLidar] Special command id %d!\n", command_id);
+            printf("[DTFC3iroboticsLidar] Special command id %d!\n", command_id);
         return LIDAR_GRAB_ELSE;
     }
 }
@@ -233,16 +233,16 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::analysisToothScan(CLidarPacket &lidar_packet)
+TLidarGrabResult DTFC3iroboticsLidar::analysisToothScan(DTFCLidarPacket &lidar_packet)
 {
     TToothScan tooth_scan;
     if(m_data_with_signal)
     {
-        tooth_scan = CLidarUnpacket::unpacketLidarScan2(lidar_packet);
+        tooth_scan = DTFCLidarUnpacket::unpacketLidarScan2(lidar_packet);
     }
     else
     {
-        tooth_scan = CLidarUnpacket::unpacketLidarScan(lidar_packet);
+        tooth_scan = DTFCLidarUnpacket::unpacketLidarScan(lidar_packet);
     }
     return combineScan(tooth_scan);
 }
@@ -255,7 +255,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::analysisNewToothScan(CLidarPacket &lidar_packet)
+TLidarGrabResult DTFC3iroboticsLidar::analysisNewToothScan(DTFCLidarPacket &lidar_packet)
 {
     TToothScan tooth_scan;
     if(Error_timeout.speedflag)
@@ -263,11 +263,11 @@ TLidarGrabResult C3iroboticsLidar::analysisNewToothScan(CLidarPacket &lidar_pack
     
     if(m_data_with_signal)
     {
-        tooth_scan = CLidarUnpacket::unpacketNewLidarScanHasSingal(lidar_packet);
+        tooth_scan = DTFCLidarUnpacket::unpacketNewLidarScanHasSingal(lidar_packet);
     }
     else
     {
-        tooth_scan = CLidarUnpacket::unpacketNewLidarScanNoSingal(lidar_packet);
+        tooth_scan = DTFCLidarUnpacket::unpacketNewLidarScanNoSingal(lidar_packet);
     }
 
     m_current_lidar_speed = tooth_scan.lidar_speed;
@@ -285,9 +285,9 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::combineScan(TToothScan &tooth_scan)
+TLidarGrabResult DTFC3iroboticsLidar::combineScan(TToothScan &tooth_scan)
 {
-    //printf("[C3iroboticsLidar] m_grab_scan_state %d, m_grab_scan_count %d!\n", m_grab_scan_state, m_grab_scan_count);
+    //printf("[DTFC3iroboticsLidar] m_grab_scan_state %d, m_grab_scan_count %d!\n", m_grab_scan_state, m_grab_scan_count);
     switch(m_grab_scan_state)
     {
         case GRAB_SCAN_FIRST:
@@ -317,7 +317,7 @@ TLidarGrabResult C3iroboticsLidar::combineScan(TToothScan &tooth_scan)
             }
             else
             {
-                printf("[C3iroboticsLidar] GRAB_SCAN_FIRST tooth scan angle %5.2f!\n",
+                printf("[DTFC3iroboticsLidar] GRAB_SCAN_FIRST tooth scan angle %5.2f!\n",
                           tooth_scan.angle);
             }
             return LIDAR_GRAB_ING;
@@ -326,18 +326,18 @@ TLidarGrabResult C3iroboticsLidar::combineScan(TToothScan &tooth_scan)
         {
             if(m_data_count_down.isEnd())
             {
-                printf("[C3iroboticsLidar] grab scan is time out %d ms! Reset grab scan state, current is %5.2f, last is %5.2f! \n",
+                printf("[DTFC3iroboticsLidar] grab scan is time out %d ms! Reset grab scan state, current is %5.2f, last is %5.2f! \n",
                           m_params.scan_time_out_ms, tooth_scan.angle, m_last_scan_angle);
                 m_grab_scan_state = GRAB_SCAN_FIRST;
                 return LIDAR_GRAB_ING;
             }
             m_data_count_down.setTime(m_params.scan_time_out_ms);
-//            printf("[C3iroboticsLidar] tooth_scan.angle %5.2f, m_last_scan_angle %5.2f!\n",
+//            printf("[DTFC3iroboticsLidar] tooth_scan.angle %5.2f, m_last_scan_angle %5.2f!\n",
 //                      tooth_scan.angle, m_last_scan_angle);
             /* Handle angle suddenly reduces */
             if(tooth_scan.angle < m_last_scan_angle)
             {
-                printf("[C3iroboticsLidar] may receive next scan, current %5.2f, last %5.2f\n",
+                printf("[DTFC3iroboticsLidar] may receive next scan, current %5.2f, last %5.2f\n",
                           tooth_scan.angle, m_last_scan_angle);
                 if(isFirstScan(tooth_scan))
                 {
@@ -367,11 +367,11 @@ TLidarGrabResult C3iroboticsLidar::combineScan(TToothScan &tooth_scan)
             }
         }
         default:
-            printf("[C3iroboticsLidar] Uknow grab scan data state %d!\n",
+            printf("[DTFC3iroboticsLidar] Uknow grab scan data state %d!\n",
                       m_grab_scan_state);
         break;
     }
-    printf("[C3iroboticsLidar] combineScan should not come to here!\n");
+    printf("[DTFC3iroboticsLidar] combineScan should not come to here!\n");
     return LIDAR_GRAB_ERRO;
 }
 
@@ -383,9 +383,9 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::grabFirstScan(TToothScan &tooth_scan)
+TLidarGrabResult DTFC3iroboticsLidar::grabFirstScan(TToothScan &tooth_scan)
 {
-//    printf("[C3iroboticsLidar] Enter first grab scan data 1 !\n");
+//    printf("[DTFC3iroboticsLidar] Enter first grab scan data 1 !\n");
 
     // Change grab state
     m_grab_scan_state = GRAB_SCAN_ELSE_DATA;
@@ -411,7 +411,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool C3iroboticsLidar::isFirstScan(TToothScan &tooth_scan)
+bool DTFC3iroboticsLidar::isFirstScan(TToothScan &tooth_scan)
 {
     if(tooth_scan.angle >= 0 && tooth_scan.angleEnd <= 22.5)
 	return true;
@@ -427,7 +427,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::LidarTranform(float &Angle, float &Dis)
+void DTFC3iroboticsLidar::LidarTranform(float &Angle, float &Dis)
 {
     const float DIS_OFFEST = 18.3;
     const float LIDAR_PAI = 3.1415926;
@@ -464,7 +464,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::toothScan2LidarScan(TToothScan &tooth_scan, TLidarScan &lidar_scan)
+void DTFC3iroboticsLidar::toothScan2LidarScan(TToothScan &tooth_scan, TLidarScan &lidar_scan)
 {
     size_t size = tooth_scan.getSize();
     float  first_angle = tooth_scan.getAngle();
@@ -509,10 +509,10 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::analysisHealthInfo(CLidarPacket &lidar_packet)
+TLidarGrabResult DTFC3iroboticsLidar::analysisHealthInfo(DTFCLidarPacket &lidar_packet)
 {
-    TLidarError lidar_error = CLidarUnpacket::unpacketHealthInfo(lidar_packet);
-    printf("[C3iroboticsLidar] Lidar error is %5.5f!\n", lidar_error );
+    TLidarError lidar_error = DTFCLidarUnpacket::unpacketHealthInfo(lidar_packet);
+    printf("[DTFC3iroboticsLidar] Lidar error is %5.5f!\n", lidar_error );
     return LIDAR_GRAB_ERRO;
 }
 
@@ -524,11 +524,11 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarGrabResult C3iroboticsLidar::analysisLidarSpeed(CLidarPacket &lidar_packet)
+TLidarGrabResult DTFC3iroboticsLidar::analysisLidarSpeed(DTFCLidarPacket &lidar_packet)
 {
     
-    char *pTemp = (char*)CLidarUnpacket::unpacketLidarInformation(lidar_packet);
-    uint tmp = CLidarUnpacket::UnpackerLidarVersion(lidar_packet);
+    char *pTemp = (char*)DTFCLidarUnpacket::unpacketLidarInformation(lidar_packet);
+    uint tmp = DTFCLidarUnpacket::UnpackerLidarVersion(lidar_packet);
     if(NULL == pTemp)
         return LIDAR_GRAB_ING;
         
@@ -574,7 +574,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::resetScanGrab()
+void DTFC3iroboticsLidar::resetScanGrab()
 {
     m_lidar_scan.clear();
     m_grab_scan_state = GRAB_SCAN_FIRST;
@@ -594,7 +594,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::PwmWriteData(const char *file_name, int64_t data)
+void DTFC3iroboticsLidar::PwmWriteData(const char *file_name, int64_t data)
 {
     int fp = 0;
     char pbuf[20] = "0";
@@ -614,7 +614,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::PwmWriteData(const char *file_name, const char *data)
+void DTFC3iroboticsLidar::PwmWriteData(const char *file_name, const char *data)
 {
     int fp = 0;
     fp = open(file_name, O_WRONLY);
@@ -630,7 +630,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::PwmInit(PWMPolarityState state)
+void DTFC3iroboticsLidar::PwmInit(PWMPolarityState state)
 {
     int num = GetDeviceNodeID();
     std::string str = "/sys/class/pwm/pwmchip" + std::to_string(num)+"/pwm0";
@@ -668,7 +668,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::ControlLidarPause()
+void DTFC3iroboticsLidar::ControlLidarPause()
 {
     int num = GetDeviceNodeID();
     std::string str =  "/sys/class/pwm/pwmchip" + std::to_string(num)+"/pwm0/enable";
@@ -682,7 +682,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::ConnectLidarStart()
+void DTFC3iroboticsLidar::ConnectLidarStart()
 {
     int num = GetDeviceNodeID();
     std::string str =  "/sys/class/pwm/pwmchip" + std::to_string(num)+"/pwm0/enable";
@@ -696,7 +696,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::SetDeviceNodeID(u8 num)
+void DTFC3iroboticsLidar::SetDeviceNodeID(u8 num)
 {
     Node_num = num;
 }
@@ -708,7 +708,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u8 C3iroboticsLidar::GetDeviceNodeID()
+u8 DTFC3iroboticsLidar::GetDeviceNodeID()
 {
     return Node_num;
 }
@@ -720,7 +720,7 @@ Output:       None
 Return:       None
 Others:       None
 /***********************************************************************************/
-u8 C3iroboticsLidar::GetPWMMaxLimit()
+u8 DTFC3iroboticsLidar::GetPWMMaxLimit()
 {
     return MaxPwm;
 }
@@ -732,7 +732,7 @@ Output:       None
 Return:       None
 Others:       None
 /***********************************************************************************/
-int C3iroboticsLidar::SetPWMMaxLimit(u8 limit)
+int DTFC3iroboticsLidar::SetPWMMaxLimit(u8 limit)
 {
     if((limit < 10)||(limit > 85))
     {
@@ -750,7 +750,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::controlLidarPWM(int32_t percent_num)
+void DTFC3iroboticsLidar::controlLidarPWM(int32_t percent_num)
 {
     uint32_t duty_cycle = 0;
     int num = GetDeviceNodeID();
@@ -774,7 +774,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::controlLidarSpeed()
+void DTFC3iroboticsLidar::controlLidarSpeed()
 {
     int32_t percent_num;
     double currentSpeed = getLidarCurrentSpeed();
@@ -800,7 +800,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int C3iroboticsLidar::SetLidarExpectSpeed(double speed)
+int DTFC3iroboticsLidar::SetLidarExpectSpeed(double speed)
 {
     if((speed > 8.0)||(speed < 4.0))
         return -1;
@@ -810,7 +810,7 @@ int C3iroboticsLidar::SetLidarExpectSpeed(double speed)
     }
     return 0;
 }
-std::string C3iroboticsLidar::GetSDKVersion()
+std::string DTFC3iroboticsLidar::GetSDKVersion()
 {
     return SDKVersion;
 
@@ -823,7 +823,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-std::string C3iroboticsLidar::GetLidarSNCode()
+std::string DTFC3iroboticsLidar::GetLidarSNCode()
 {
 
     for(int i = 0;i < 8;i++)
@@ -844,7 +844,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void C3iroboticsLidar::SetLidarversion(TLidarVersion ver)
+void DTFC3iroboticsLidar::SetLidarversion(TLidarVersion ver)
 {
     LidarV = ver;
 }
@@ -856,7 +856,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarVersion C3iroboticsLidar::GetLidarversion()
+TLidarVersion DTFC3iroboticsLidar::GetLidarversion()
 {
     return LidarV;
 }
@@ -868,7 +868,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-std::string C3iroboticsLidar::GetLidarFirmwareVersion()
+std::string DTFC3iroboticsLidar::GetLidarFirmwareVersion()
 {
     strncpy(SoftwareV, &pProInfopBuf[32], 11);
     SoftwareV[11] = '\0';
@@ -884,7 +884,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-std::string C3iroboticsLidar::GetLidarHardwareVersion()
+std::string DTFC3iroboticsLidar::GetLidarHardwareVersion()
 {
     strncpy(HardwareV, &pProInfopBuf[44], 11);
     HardwareV[11] = '\0';
@@ -900,7 +900,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-std::string C3iroboticsLidar::GetLidarType()
+std::string DTFC3iroboticsLidar::GetLidarType()
 {
 
     strncpy(Lidartype, &pProInfopBuf[25], 6);
@@ -917,7 +917,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool C3iroboticsLidar::GetDeviceInfo()
+bool DTFC3iroboticsLidar::GetDeviceInfo()
 {
     bool flut = FALSE;
     std::string str_Info;
@@ -960,7 +960,7 @@ Output:       None
 Return:       success return 0,or return -1 
 Others:       None
 ***********************************************************************************/
-bool C3iroboticsLidar::SetPwmpolarity(PWMPolarityState state)
+bool DTFC3iroboticsLidar::SetPwmpolarity(PWMPolarityState state)
 {
     switch (state)
     {
@@ -991,7 +991,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int32_t C3iroboticsLidar::GetPwm()
+int32_t DTFC3iroboticsLidar::GetPwm()
 {
     return percent;
 }

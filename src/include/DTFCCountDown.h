@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CCountDown.h
+File name:	  DTFCCountDown.h
 Author:       Kimbo
 Version:      V1.6.0
 Date:	 	  2016-7-12
@@ -12,11 +12,11 @@ History:
 	Modification:
 ***********************************************************************************/
 
-#ifndef EVEREST_LIDAR_CCOUNTDOWN_H_
-#define EVEREST_LIDAR_CCOUNTDOWN_H_
+#ifndef EVEREST_LIDAR_DTFCCOUNTDOWN_H_
+#define EVEREST_LIDAR_DTFCCOUNTDOWN_H_
 
 /******************************* Current libs includes ****************************/
-#include "CTime.h"
+#include "DTFCTime.h"
 
 /********************************** System includes *******************************/
 #include <string>
@@ -26,17 +26,17 @@ namespace dtfeverest
 {
     namespace dtfhwdrivers
     {
-        class CCountDown
+        class DTFCCountDown
         {
             public:
-                /* Constructor */
-                CCountDown();
+                /* DTFCCountDown */
+                DTFCCountDown();
 
-                /* Constructor */
-                CCountDown(double time_ms);
+                /* DTFCCountDown */
+                DTFCCountDown(double time_ms);
 
                 /* Destructor */
-                ~CCountDown();
+                ~DTFCCountDown();
 
                 /* Set time */
                 void setTime(double time_ms);

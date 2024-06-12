@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  CLidarPacket.h
+File name:	  DTFCLidarPacket.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-04
@@ -12,14 +12,14 @@ History:
 	Modification:
 ***********************************************************************************/
 
-#ifndef EVEREST_LIDAR_CLIDARPACKET_H
-#define EVEREST_LIDAR_CLIDARPACKET_H
+#ifndef EVEREST_LIDAR_DTFCLIDARPACKET_H
+#define EVEREST_LIDAR_DTFCLIDARPACKET_H
 
 /******************************* Current libs includes ****************************/
-#include "typedef.h"
+#include "DTFtypedef.h"
 
 /******************************* Current libs includes ****************************/
-#include "CCountDown.h"
+#include "DTFCCountDown.h"
 
 /******************************* System libs includes *****************************/
 #include <vector>
@@ -43,14 +43,14 @@ namespace dtfeverest
             LIDAR_ERROR_UNKNOW,
         };
 
-	    class CLidarPacket
+	    class DTFCLidarPacket
 	    {
 	        public:
-                /* Constructor */
-                CLidarPacket();
+                /* DTFCLidarPacket */
+                DTFCLidarPacket();
 
-               //Destructor
-               ~CLidarPacket() {};
+               //DTFCLidarPacket
+               ~DTFCLidarPacket() {};
 
                 /* Return true if buffer is empty */
                 bool isEmpty() { return m_length == 0? true: false; }
@@ -131,9 +131,9 @@ namespace dtfeverest
                 bool               m_valid;
                 TLidarError        m_lidar_erro;
                 bool               m_error_crc;//
-                CCountDown         Timeout_CRC;//
+                DTFCCountDown         Timeout_CRC;//
                 bool               m_error_Data_Wrong;
-                CCountDown         Timeout_Data_Wrong; 
+                DTFCCountDown         Timeout_Data_Wrong; 
 	    };
 	}
 }

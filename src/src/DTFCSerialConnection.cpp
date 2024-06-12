@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CSerialConnection.cpp
+File name:	  DTFCSerialConnection.cpp
 Author:       Shizhe
 Version:      V1.6.1
 Date:	 	  2016-3-2
@@ -13,11 +13,11 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include "CSerialConnection.h"
+#include "DTFCSerialConnection.h"
 
 /********************************** Current libs includes *************************/
-#include "CArcTime.h"
-#include "CCountDown.h"
+#include "DTFCArcTime.h"
+#include "DTFCCountDown.h"
 
 /********************************** System libs includes **************************/
 #include <sys/time.h>
@@ -41,14 +41,14 @@ using namespace dtfeverest::dtfhwdrivers;
 #define TIOSTARTTIMESTAMP       0x5481
 
 /***********************************************************************************
-Function:     CSerialConnection
-Description:  The constructor of CSerialConnection
+Function:     DTFCSerialConnection
+Description:  The constructor of DTFCSerialConnection
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CSerialConnection::CSerialConnection()
+DTFCSerialConnection::DTFCSerialConnection()
 {
 	m_port = -1;
 	m_taking_timestamps = false;
@@ -60,14 +60,14 @@ CSerialConnection::CSerialConnection()
 }
 
 /***********************************************************************************
-Function:     CSerialConnection
-Description:  The Destructor of CSerialConnection
+Function:     DTFCSerialConnection
+Description:  The Destructor of DTFCSerialConnection
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CSerialConnection::~CSerialConnection()
+DTFCSerialConnection::~DTFCSerialConnection()
 {
 	if (m_port != -1)
 	{
@@ -83,7 +83,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-//void CSerialConnection::buildStrMap(void)
+//void DTFCSerialConnection::buildStrMap(void)
 //{
 //	m_str_map[OPEN_COULD_NOT_OPEN_PORT] = "Could not open serial port.";
 //	m_str_map[OPEN_COULD_NOT_SET_UP_PORT] = "Could not set up serial port.";
@@ -100,13 +100,13 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-const char* CSerialConnection::getOpenMessage(int messageNumber)
+const char* DTFCSerialConnection::getOpenMessage(int messageNumber)
 {
     return m_str_map[messageNumber].c_str();
 }
 
 
-int CSerialConnection::set_opt(int fd,int nSpeed, int nBits, char nEvent, int nStop)
+int DTFCSerialConnection::set_opt(int fd,int nSpeed, int nBits, char nEvent, int nStop)
 {
     struct termios newtio, oldtio;
     if (tcgetattr(m_port,&oldtio) != 0) {
@@ -205,20 +205,20 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::internalOpen(void)
+int DTFCSerialConnection::internalOpen(void)
 {
 	struct termios tio;
 
 	if (m_status == STATUS_OPEN)
 	{
-		printf("[CSerialConnection]Open: Serial port already open");
+		printf("[DTFCSerialConnection]Open: Serial port already open");
 		return OPEN_ALREADY_OPEN;
 	}
 
 	/* Open the port */
 	if ((m_port = ::open(m_port_name.c_str(),O_RDWR | O_NDELAY)) < 0)
 	{
-		printf("[CSerialConnection]Could not open serial port '%s'!\n", m_port_name.c_str());
+		printf("[DTFCSerialConnection]Could not open serial port '%s'!\n", m_port_name.c_str());
 		return OPEN_COULD_NOT_OPEN_PORT;
     }
 
@@ -230,7 +230,7 @@ int CSerialConnection::internalOpen(void)
 	/* Set the tty baud, buffering and modes */
 	if (tcgetattr(m_port, &tio) != 0)
 	{
-		printf("[CSerialConnection]Could not get port data to set up port!\n");
+		printf("[DTFCSerialConnection]Could not get port data to set up port!\n");
 		close();
 		m_status = STATUS_OPEN_FAILED;
 		return OPEN_COULD_NOT_SET_UP_PORT;
@@ -257,7 +257,7 @@ int CSerialConnection::internalOpen(void)
 
 	if (tcsetattr(m_port,TCSAFLUSH,&tio) < 0)
 	{
-		printf("[CSerialConnection]Could not set up port!\n");
+		printf("[DTFCSerialConnection]Could not set up port!\n");
 		close();
 		m_status = STATUS_OPEN_FAILED;
 		return OPEN_COULD_NOT_SET_UP_PORT;
@@ -267,7 +267,7 @@ int CSerialConnection::internalOpen(void)
 
 	if (rateToBaud(m_baud_rate) == -1)
 	{
-		printf("[CSerialConnection]open: Invalid baud rate!\n");
+		printf("[DTFCSerialConnection]open: Invalid baud rate!\n");
 		close();
 		m_status = STATUS_OPEN_FAILED;
 		return OPEN_INVALID_BAUD_RATE;
@@ -275,7 +275,7 @@ int CSerialConnection::internalOpen(void)
 
 	if (!setBaud(m_baud_rate))
 	{
-		printf("[CSerialConnection]open: Could not set baud rate.!\n");
+		printf("[DTFCSerialConnection]open: Could not set baud rate.!\n");
 		close();
 		m_status = STATUS_OPEN_FAILED;
 		return OPEN_COULD_NOT_SET_BAUD;
@@ -283,14 +283,14 @@ int CSerialConnection::internalOpen(void)
 
 	if (!setHardwareControl(m_hardware_control))
 	{
-		printf("[CSerialConnection]open: Could not set hardware control.!\n");
+		printf("[DTFCSerialConnection]open: Could not set hardware control.!\n");
 		close();
 		m_status = STATUS_OPEN_FAILED;
 		return OPEN_COULD_NOT_SET_UP_PORT;
 	}
 	#endif // 0
 
-	printf("[CSerialConnection]open: Successfully opened and configured serial port!\n");
+	printf("[DTFCSerialConnection]open: Successfully opened and configured serial port!\n");
 	return 0;
 }
 
@@ -302,7 +302,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::openSimple(void)
+bool DTFCSerialConnection::openSimple(void)
 {
 	if (internalOpen() == 0)
 	{
@@ -323,7 +323,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CSerialConnection::setPort(const char *port)
+void DTFCSerialConnection::setPort(const char *port)
 {
 	if (port == NULL)
 	{
@@ -343,7 +343,7 @@ Output:       None
 Return:       The seiral port to connect to
 Others:       NoneopenSimple
 ***********************************************************************************/
-void CSerialConnection::closeSerial()
+void DTFCSerialConnection::closeSerial()
 {
     close();
 }
@@ -356,7 +356,7 @@ Output:       None
 Return:       The seiral port to connect to
 Others:       None
 ***********************************************************************************/
-const char * CSerialConnection::getPort(void)
+const char * DTFCSerialConnection::getPort(void)
 {
   return m_port_name.c_str();
 }
@@ -370,7 +370,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::open(const char *port)
+int DTFCSerialConnection::open(const char *port)
 {
 	setPort(port);
 	return internalOpen();
@@ -384,7 +384,7 @@ Output:       None
 Return:       0 for success, otherwise one of the close enums
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::close(void)
+bool DTFCSerialConnection::close(void)
 {
 	int ret;
 
@@ -396,11 +396,11 @@ bool CSerialConnection::close(void)
 
 	if (ret == 0)
 	{
-		printf("[CSerialConnection]::close: Successfully closed serial port.");
+		printf("[DTFCSerialConnection]::close: Successfully closed serial port.");
 	}
 	else
 	{
-		printf("[CSerialConnection]::close: Unsuccessfully closed serial port.");
+		printf("[DTFCSerialConnection]::close: Unsuccessfully closed serial port.");
 	}
 	m_port = -1;
 	if (ret == 0)
@@ -421,7 +421,7 @@ Output:       None
 Return:       whether the set succeeded
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::setBaud(int rate)
+bool DTFCSerialConnection::setBaud(int rate)
 {
 	struct termios tio;
 	int baud;
@@ -438,25 +438,25 @@ bool CSerialConnection::setBaud(int rate)
 
 	if (tcgetattr(m_port, &tio) != 0)
 	{
-		printf("[CSerialConnection]::setBaud: Could not get port data.");
+		printf("[DTFCSerialConnection]::setBaud: Could not get port data.");
 		return false;
 	}
 
 	if (cfsetospeed(&tio, baud))
 	{
-		printf("[CSerialConnection]::setBaud: Could not set output baud rate on termios struct.");
+		printf("[DTFCSerialConnection]::setBaud: Could not set output baud rate on termios struct.");
 		return false;
 	}
 
 	if (cfsetispeed(&tio, baud))
 	{
-		printf("[CSerialConnection]::setBaud: Could not set input baud rate on termios struct.");
+		printf("[DTFCSerialConnection]::setBaud: Could not set input baud rate on termios struct.");
 		return false;
 	}
 
 	if(tcsetattr(m_port,TCSAFLUSH,&tio) < 0)
 	{
-		printf("[CSerialConnection]::setBaud: Could not set baud rate.");
+		printf("[DTFCSerialConnection]::setBaud: Could not set baud rate.");
 		return false;
 	}
 
@@ -474,7 +474,7 @@ Output:       None
 Return:       whether the set succeeded
 Others:       None
 ***********************************************************************************/
-void CSerialConnection::startTimeStamping(void)
+void DTFCSerialConnection::startTimeStamping(void)
 {
 	long baud;
 	baud = m_baud_rate;
@@ -496,7 +496,7 @@ Output:       None
 Return:       the current baud rate of the connection
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::getBaud(void)
+int DTFCSerialConnection::getBaud(void)
 {
   return m_baud_rate;
 }
@@ -509,7 +509,7 @@ Output:       None
 Return:       the baud id
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::rateToBaud(int rate)
+int DTFCSerialConnection::rateToBaud(int rate)
 {
 	switch (rate)
 	{
@@ -525,7 +525,7 @@ int CSerialConnection::rateToBaud(int rate)
 		case 115200: return B115200;
         case 230400: return B230400; 
 		default:
-		  printf("[CSerialConnection]::rateToBaud: Did not know baud for rate %d.", rate);
+		  printf("[DTFCSerialConnection]::rateToBaud: Did not know baud for rate %d.", rate);
 		return -1;
 	}
 }
@@ -538,7 +538,7 @@ Output:       None
 Return:       the rate
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::baudToRate(int baud)
+int DTFCSerialConnection::baudToRate(int baud)
 {
 	switch (baud)
 	{
@@ -554,7 +554,7 @@ int CSerialConnection::baudToRate(int baud)
 		case B115200: return 115200;
 		case B230400: return 230400;
 		default:
-		  printf("[CSerialConnection]:baudToRate: Did not know rate for baud.");
+		  printf("[DTFCSerialConnection]:baudToRate: Did not know rate for baud.");
 		return -1;
 	}
 }
@@ -567,7 +567,7 @@ Output:       None
 Return:       return true if the set succeeded
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::setHardwareControl(bool hardwareControl)
+bool DTFCSerialConnection::setHardwareControl(bool hardwareControl)
 {
 	struct termios tio;
 
@@ -592,7 +592,7 @@ bool CSerialConnection::setHardwareControl(bool hardwareControl)
 
 	if(tcsetattr(m_port,TCSAFLUSH,&tio) < 0)
 	{
-		printf("[CSerialConnection]::setHardwareControl: Could not set hardware control.");
+		printf("[DTFCSerialConnection]::setHardwareControl: Could not set hardware control.");
 		return false;
 	}
 	else
@@ -609,7 +609,7 @@ Output:       None
 Return:       true if hardware control of lines is enabled, false otherwise
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::getHardwareControl(void)
+bool DTFCSerialConnection::getHardwareControl(void)
 {
 	return m_hardware_control;
 }
@@ -623,7 +623,7 @@ Output:       None
 Return:       true if hardware write data successfully, false otherwise
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::write(const char *data, unsigned int size)
+int DTFCSerialConnection::write(const char *data, unsigned int size)
 {
 	int n;
 
@@ -639,12 +639,12 @@ int CSerialConnection::write(const char *data, unsigned int size)
 				if (n >= 0)
 					return n;
 			}
-			printf("[CSerialConnection]::write: Error on writing.\n");
-			perror("[CSerialConnection]::write:");
+			printf("[DTFCSerialConnection]::write: Error on writing.\n");
+			perror("[DTFCSerialConnection]::write:");
 		}
 		return n;
 	}
-	printf("[CSerialConnection]::write: Connection invalid.!\n");
+	printf("[DTFCSerialConnection]::write: Connection invalid.!\n");
 	return -1;
 }
 
@@ -658,7 +658,7 @@ Output:       None
 Return:       true if hardware read data successfully, false otherwise
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::read(const char *data, unsigned int size, unsigned int msWait)
+int DTFCSerialConnection::read(const char *data, unsigned int size, unsigned int msWait)
 {
 	struct timeval tp;		/* time interval structure for timeout */
 	fd_set fdset;				/* fd set ??? */
@@ -666,7 +666,7 @@ int CSerialConnection::read(const char *data, unsigned int size, unsigned int ms
 	long timeLeft;
 	unsigned int bytesRead = 0;
 
-    CArcTime timeDone;
+    DTFCArcTime timeDone;
 	if (m_port >= 0)
 	{
 		if (msWait >= 0)
@@ -677,18 +677,18 @@ int CSerialConnection::read(const char *data, unsigned int size, unsigned int ms
 			{
 				tp.tv_sec = (timeLeft) / 1000;	/* we're polling */
 				tp.tv_usec = (timeLeft % 1000) * 1000;
-				//printf("[CSerialConnection]::read: tp.tv_sec  =%d tp.tv_usec =%d \n",tp.tv_sec ,tp.tv_usec);
+				//printf("[DTFCSerialConnection]::read: tp.tv_sec  =%d tp.tv_usec =%d \n",tp.tv_sec ,tp.tv_usec);
 				FD_ZERO(&fdset);
 				FD_SET(m_port,&fdset);
 				int selectResult = select(m_port+1,&fdset,NULL,NULL,&tp);
 				if (selectResult <= 0)
 				{
-				    //printf("[CSerialConnection]::select err bytesRead =%d selectResult = %d errno %d m_port =%d \n",bytesRead ,selectResult,errno,m_port);
+				    //printf("[DTFCSerialConnection]::select err bytesRead =%d selectResult = %d errno %d m_port =%d \n",bytesRead ,selectResult,errno,m_port);
 					return bytesRead;
 				}
 				if ((n = ::read(m_port, const_cast<char *>(data)+bytesRead, size-bytesRead)) == -1)
 				{
-					printf("[CSerialConnection]::read:  Blocking read failed.\n");
+					printf("[DTFCSerialConnection]::read:  Blocking read failed.\n");
 					return bytesRead;
 				}
 				bytesRead += n;
@@ -704,12 +704,12 @@ int CSerialConnection::read(const char *data, unsigned int size, unsigned int ms
 			n = ::read(m_port, const_cast<char *>(data), size);
 			if (n == -1)
 			{
-				printf("[CSerialConnection]::read:  Non-Blocking read failed.\n");
+				printf("[DTFCSerialConnection]::read:  Non-Blocking read failed.\n");
 			}
 			return n;
 		}
 	}
-	printf("[CSerialConnection]::read:  Connection invalid.\n");
+	printf("[DTFCSerialConnection]::read:  Connection invalid.\n");
 	return -1;
 }
 
@@ -721,7 +721,7 @@ Output:       None
 Return:       return the status the port
 Others:       None
 ***********************************************************************************/
-int CSerialConnection::getStatus(void)
+int DTFCSerialConnection::getStatus(void)
 {
 	return m_status;
 }
@@ -734,7 +734,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::getCTS(void)
+bool DTFCSerialConnection::getCTS(void)
 {
 	unsigned int value;
 	if (ioctl(m_port, TIOCMGET, &value) == 0)
@@ -756,7 +756,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::getDSR(void)
+bool DTFCSerialConnection::getDSR(void)
 {
 	unsigned int value;
 	if (ioctl(m_port, TIOCMGET, &value) == 0)
@@ -778,7 +778,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::getDCD(void)
+bool DTFCSerialConnection::getDCD(void)
 {
 	unsigned int value;
 	if (ioctl(m_port, TIOCMGET, &value) == 0)
@@ -800,7 +800,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CSerialConnection::getRing(void)
+bool DTFCSerialConnection::getRing(void)
 {
 	unsigned int value;
 	if (ioctl(m_port, TIOCMGET, &value) == 0)

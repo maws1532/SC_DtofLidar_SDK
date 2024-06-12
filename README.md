@@ -1,5 +1,12 @@
 # SC_DtofLidar_SDK
 state:  
+1、2024/06/11 update
+
+Version:
+	tag v1.3  
+i、修改命名空间名、类名、.cpp/.h文件名，以此区分三角雷达SDK，在一个工程去编译。
+
+state:  
 1、2024/06/04 update
 
 Version:

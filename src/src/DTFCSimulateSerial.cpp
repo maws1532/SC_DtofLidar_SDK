@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CSimulateSerial.cpp
+File name:	  DTFCSimulateSerial.cpp
 Author:       Shizhe
 Version:      V1.6.1
 Date:	 	  2016-3-2
@@ -13,11 +13,11 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include <CSimulateSerial.h>
+#include <DTFCSimulateSerial.h>
 
 /********************************** Current libs includes *************************/
-#include <CArcTime.h>
-#include <CCountDown.h>
+#include <DTFCArcTime.h>
+#include <DTFCCountDown.h>
 
 /********************************** System libs includes **************************/
 #include <sys/time.h>
@@ -39,14 +39,14 @@ using namespace dtfeverest::dtfhwdrivers;
 
 
 /***********************************************************************************
-Function:     CSimulateSerial
-Description:  The constructor of CSimulateSerial
+Function:     DTFCSimulateSerial
+Description:  The constructor of DTFCSimulateSerial
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CSimulateSerial::CSimulateSerial()
+DTFCSimulateSerial::DTFCSimulateSerial()
 {
     m_port_name = "none";
 	m_baud_rate = 0;
@@ -54,14 +54,14 @@ CSimulateSerial::CSimulateSerial()
 }
 
 /***********************************************************************************
-Function:     CSimulateSerial
-Description:  The Destructor of CSimulateSerial
+Function:     DTFCSimulateSerial
+Description:  The Destructor of DTFCSimulateSerial
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CSimulateSerial::~CSimulateSerial()
+DTFCSimulateSerial::~DTFCSimulateSerial()
 {
 	if (m_fp)
 	{
@@ -77,18 +77,18 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int CSimulateSerial::internalOpen(void)
+int DTFCSimulateSerial::internalOpen(void)
 {
 	if (m_status == STATUS_OPEN)
 	{
-		printf("[CSimulateSerial]Open: Serial port already open!\n");
+		printf("[DTFCSimulateSerial]Open: Serial port already open!\n");
 		return OPEN_ALREADY_OPEN;
 	}
 
     m_fp.open(m_port_name.c_str(), std::ifstream::in);
     if(!m_fp)
     {
-        printf("[CSimulateSerial] Cound not open file %s!\n", m_port_name.c_str());
+        printf("[DTFCSimulateSerial] Cound not open file %s!\n", m_port_name.c_str());
         m_status = STATUS_OPEN_FAILED;
         return STATUS_OPEN_FAILED;
     }
@@ -97,7 +97,7 @@ int CSimulateSerial::internalOpen(void)
         m_status = STATUS_OPEN;
     }
 
-	printf("[CSimulateSerial]open: Successfully opened and configured simulate serial port!\n");
+	printf("[DTFCSimulateSerial]open: Successfully opened and configured simulate serial port!\n");
 	return 0;
 }
 
@@ -109,7 +109,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-bool CSimulateSerial::openSimple(void)
+bool DTFCSimulateSerial::openSimple(void)
 {
 	if (internalOpen() == 0)
 	{
@@ -130,7 +130,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-void CSimulateSerial::setPort(const char *port)
+void DTFCSimulateSerial::setPort(const char *port)
 {
 	if (port == NULL)
 	{
@@ -150,7 +150,7 @@ Output:       None
 Return:       The seiral port to connect to
 Others:       None
 ***********************************************************************************/
-const char * CSimulateSerial::getPort(void)
+const char * DTFCSimulateSerial::getPort(void)
 {
   return m_port_name.c_str();
 }
@@ -164,7 +164,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int CSimulateSerial::open(const char *port)
+int DTFCSimulateSerial::open(const char *port)
 {
 	setPort(port);
 	return internalOpen();
@@ -178,7 +178,7 @@ Output:       None
 Return:       0 for success, otherwise one of the close enums
 Others:       None
 ***********************************************************************************/
-bool CSimulateSerial::close(void)
+bool DTFCSimulateSerial::close(void)
 {
 	if(m_fp)
 	{
@@ -195,7 +195,7 @@ Output:       None
 Return:       whether the set succeeded
 Others:       None
 ***********************************************************************************/
-bool CSimulateSerial::setBaud(int rate)
+bool DTFCSimulateSerial::setBaud(int rate)
 {
 	return true;
 }
@@ -208,7 +208,7 @@ Output:       None
 Return:       the current baud rate of the connection
 Others:       None
 ***********************************************************************************/
-int CSimulateSerial::getBaud(void)
+int DTFCSimulateSerial::getBaud(void)
 {
     return m_baud_rate;
 }
@@ -222,9 +222,9 @@ Output:       None
 Return:       true if hardware write data successfully, false otherwise
 Others:       None
 ***********************************************************************************/
-int CSimulateSerial::write(const char *data, unsigned int size)
+int DTFCSimulateSerial::write(const char *data, unsigned int size)
 {
-	printf("[CSimulateSerial]::write: Connection invalid.!\n");
+	printf("[DTFCSimulateSerial]::write: Connection invalid.!\n");
 	return -1;
 }
 
@@ -238,13 +238,13 @@ Output:       None
 Return:       true if hardware read data successfully, false otherwise
 Others:       None
 ***********************************************************************************/
-int CSimulateSerial::read(const char *data, unsigned int size, unsigned int msWait)
+int DTFCSimulateSerial::read(const char *data, unsigned int size, unsigned int msWait)
 {
 	unsigned int bytesRead = 0;
 
     if(!m_fp)
     {
-        printf("[CSimulateSerial] Finish read data!\n");
+        printf("[DTFCSimulateSerial] Finish read data!\n");
         return -1;
     }
 
@@ -262,7 +262,7 @@ int CSimulateSerial::read(const char *data, unsigned int size, unsigned int msWa
         {
             break;
         }
-        printf("[CSimulateSerial] read ch %d!\n", int(ch));
+        printf("[DTFCSimulateSerial] read ch %d!\n", int(ch));
     }
     return bytesRead;
 }
@@ -275,7 +275,7 @@ Output:       None
 Return:       return the status the port
 Others:       None
 ***********************************************************************************/
-int CSimulateSerial::getStatus(void)
+int DTFCSimulateSerial::getStatus(void)
 {
 	return m_status;
 }

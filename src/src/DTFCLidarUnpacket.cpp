@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  CLidarUnpacket.h
+File name:	  DTFCLidarUnpacket.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-06
@@ -13,7 +13,7 @@ History:
 ***********************************************************************************/
 
 /********************************* File includes **********************************/
-#include "CLidarUnpacket.h"
+#include "DTFCLidarUnpacket.h"
 
 /******************************* System libs includes *****************************/
 #include <string.h>
@@ -22,27 +22,27 @@ History:
 using namespace dtfeverest;
 using namespace dtfeverest::dtfhwdrivers;
 /***********************************************************************************
-Function:     CLidarUnpacket
-Description:  The constructor of CLidarUnpacket
+Function:     DTFCLidarUnpacket
+Description:  The constructor of DTFCLidarUnpacket
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarUnpacket::CLidarUnpacket()
+DTFCLidarUnpacket::DTFCLidarUnpacket()
 {
     
 }
 
 /***********************************************************************************
-Function:     CLidarUnpacket
-Description:  The destructor of CLidarUnpacket
+Function:     DTFCLidarUnpacket
+Description:  The destructor of DTFCLidarUnpacket
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CLidarUnpacket::~CLidarUnpacket()
+DTFCLidarUnpacket::~DTFCLidarUnpacket()
 {
 
 }
@@ -54,7 +54,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TToothScan CLidarUnpacket::unpacketLidarScan(CLidarPacket &packet)
+TToothScan DTFCLidarUnpacket::unpacketLidarScan(DTFCLidarPacket &packet)
 {
     TToothScan tooth_scan;
     u16 length = packet.getParamLength();
@@ -64,7 +64,7 @@ TToothScan CLidarUnpacket::unpacketLidarScan(CLidarPacket &packet)
     u16 distance = 0;
 
     // Get tooth angle, unit is 0.01 degree
-    tooth_angle = CLidarPacket::bufToUByte2(buffer);
+    tooth_angle = DTFCLidarPacket::bufToUByte2(buffer);
     tooth_scan.angle = float(tooth_angle) / 100.0;
 
     // Get distance number
@@ -75,12 +75,12 @@ TToothScan CLidarUnpacket::unpacketLidarScan(CLidarPacket &packet)
     //                            2(distance_bytes)
     distance_number = (length - 2) / 2;
     tooth_scan.distance.resize(distance_number);
-//    printf("[CLidarUnpacket] angle %5.2f, distance_number %d !\n",tooth_scan.angle, distance_number);
+//    printf("[DTFCLidarUnpacket] angle %5.2f, distance_number %d !\n",tooth_scan.angle, distance_number);
 
     // Get distance, unit is 0.25mm
     for(size_t i = 0 ; i < distance_number; i++)
     {
-        distance = CLidarPacket::bufToUByte2(buffer + 2 * i + 2);
+        distance = DTFCLidarPacket::bufToUByte2(buffer + 2 * i + 2);
 
         tooth_scan.distance[i] = float(distance) / 4.0f / 1000.0f;
     }
@@ -96,7 +96,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TToothScan CLidarUnpacket::unpacketLidarScan2(CLidarPacket &packet)
+TToothScan DTFCLidarUnpacket::unpacketLidarScan2(DTFCLidarPacket &packet)
 {
     TToothScan tooth_scan;
     u16 length = packet.getParamLength();
@@ -107,7 +107,7 @@ TToothScan CLidarUnpacket::unpacketLidarScan2(CLidarPacket &packet)
     u8 signal = 0;
 
     // Get tooth angle, unit is 0.01 degree
-    tooth_angle = CLidarPacket::bufToUByte2(buffer);
+    tooth_angle = DTFCLidarPacket::bufToUByte2(buffer);
     tooth_scan.angle = float(tooth_angle) / 100.0;
 
     // Get distance number
@@ -119,17 +119,17 @@ TToothScan CLidarUnpacket::unpacketLidarScan2(CLidarPacket &packet)
     distance_number = (length - 2) / 3;
     tooth_scan.distance.resize(distance_number);
     tooth_scan.signal.resize(distance_number);
-//    printf("[CLidarUnpacket] distance_number %d! packe length %d\n", distance_number, length);
+//    printf("[DTFCLidarUnpacket] distance_number %d! packe length %d\n", distance_number, length);
 
     // Get distance, unit is 0.25mm
 //    packet.printHex();
     for(size_t i = 0 ; i < distance_number; i++)
     {
-        signal = CLidarPacket::bufToUByte((buffer+2) + 3*i);
-        distance = CLidarPacket::bufToUByte2((buffer+2) + 3*i + 1);
+        signal = DTFCLidarPacket::bufToUByte((buffer+2) + 3*i);
+        distance = DTFCLidarPacket::bufToUByte2((buffer+2) + 3*i + 1);
         tooth_scan.distance[i] = float(distance) / 4.0f / 1000.0f;
         tooth_scan.signal[i] = int(signal);
-//        printf("[CLidarUnpacket]sigal %d! distance %5.2f\n", tooth_scan.signal[i], tooth_scan.distance[i]);
+//        printf("[DTFCLidarUnpacket]sigal %d! distance %5.2f\n", tooth_scan.signal[i], tooth_scan.distance[i]);
     }
     return tooth_scan;
 }
@@ -142,7 +142,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TToothScan CLidarUnpacket::unpacketNewLidarScanNoSingal(CLidarPacket &packet)
+TToothScan DTFCLidarUnpacket::unpacketNewLidarScanNoSingal(DTFCLidarPacket &packet)
 {
     TToothScan tooth_scan;
     int head_ptr_offset = 0;
@@ -155,9 +155,9 @@ TToothScan CLidarUnpacket::unpacketNewLidarScanNoSingal(CLidarPacket &packet)
     u16 distance = 0;
 
     // Get tooth angle, unit is 0.01 degree
-    lidar_speed = CLidarPacket::bufToUByte(buffer + head_ptr_offset);                   head_ptr_offset += 1;
-    lidar_offset_angle = CLidarPacket::bufToByte2(buffer + head_ptr_offset);            head_ptr_offset += 2;
-    tooth_angle = CLidarPacket::bufToUByte2(buffer + head_ptr_offset);                  head_ptr_offset += 2;
+    lidar_speed = DTFCLidarPacket::bufToUByte(buffer + head_ptr_offset);                   head_ptr_offset += 1;
+    lidar_offset_angle = DTFCLidarPacket::bufToByte2(buffer + head_ptr_offset);            head_ptr_offset += 2;
+    tooth_angle = DTFCLidarPacket::bufToUByte2(buffer + head_ptr_offset);                  head_ptr_offset += 2;
 
     tooth_scan.angle = float(tooth_angle) * 0.01f;
     tooth_scan.offset_valid = false;
@@ -172,12 +172,12 @@ TToothScan CLidarUnpacket::unpacketNewLidarScanNoSingal(CLidarPacket &packet)
     //                            2(distance_bytes)
     distance_number = (length - head_ptr_offset) / 2;
     tooth_scan.distance.resize(distance_number);
-//    printf("[CLidarUnpacket] angle %5.2f, distance_number %d !\n",tooth_scan.angle, distance_number);
+//    printf("[DTFCLidarUnpacket] angle %5.2f, distance_number %d !\n",tooth_scan.angle, distance_number);
 
     // Get distance, unit is 0.25mm
     for(size_t i = 0 ; i < distance_number; i++)
     {
-        distance = CLidarPacket::bufToUByte2(buffer + 2 * i + head_ptr_offset);
+        distance = DTFCLidarPacket::bufToUByte2(buffer + 2 * i + head_ptr_offset);
 
         tooth_scan.distance[i] = float(distance) / 4.0f / 1000.0f;
     }
@@ -193,7 +193,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TToothScan CLidarUnpacket::unpacketNewLidarScanHasSingal(CLidarPacket &packet)
+TToothScan DTFCLidarUnpacket::unpacketNewLidarScanHasSingal(DTFCLidarPacket &packet)
 {
     TToothScan tooth_scan;
     int head_ptr_offset = 0;
@@ -208,10 +208,10 @@ TToothScan CLidarUnpacket::unpacketNewLidarScanHasSingal(CLidarPacket &packet)
     u16 tooth_angle_start = 0, tooth_angle_end = 0;
     int tmpnum = 0;
     // Get tooth angle, unit is 0.01 degree
-    lidar_speed = CLidarPacket::bufToUByte(buffer + head_ptr_offset);                   head_ptr_offset += 1;
-    lidar_offset_angle = CLidarPacket::bufToByte2(buffer + head_ptr_offset);            head_ptr_offset += 2;
-    tooth_angle_start = CLidarPacket::bufToUByte2(buffer + head_ptr_offset);            head_ptr_offset += 2;
-    tooth_angle_end = CLidarPacket::bufToUByte2(buffer + head_ptr_offset);            	head_ptr_offset += 2;
+    lidar_speed = DTFCLidarPacket::bufToUByte(buffer + head_ptr_offset);                   head_ptr_offset += 1;
+    lidar_offset_angle = DTFCLidarPacket::bufToByte2(buffer + head_ptr_offset);            head_ptr_offset += 2;
+    tooth_angle_start = DTFCLidarPacket::bufToUByte2(buffer + head_ptr_offset);            head_ptr_offset += 2;
+    tooth_angle_end = DTFCLidarPacket::bufToUByte2(buffer + head_ptr_offset);            	head_ptr_offset += 2;
 
     tooth_scan.angle = float(tooth_angle_start) * 0.01f;
     tooth_scan.angleEnd = float(tooth_angle_end) * 0.01f;
@@ -229,15 +229,15 @@ TToothScan CLidarUnpacket::unpacketNewLidarScanHasSingal(CLidarPacket &packet)
     distance_number = (length - head_ptr_offset) / 3;
     tooth_scan.distance.resize(distance_number);
     tooth_scan.signal.resize(distance_number);
-//    printf("[CLidarUnpacket] tooth_scan.angle %5.2f tooth_scan.offset_angle %5.2f, tooth_scan.lidar_speed %5.2f, distance_number %d! packe length %d\n",
+//    printf("[DTFCLidarUnpacket] tooth_scan.angle %5.2f tooth_scan.offset_angle %5.2f, tooth_scan.lidar_speed %5.2f, distance_number %d! packe length %d\n",
 //              tooth_scan.angle, tooth_scan.offset_angle, tooth_scan.lidar_speed, distance_number, length);
 
     // Get distance, unit is 0.25mm
 //    packet.printHex();
     for(size_t i = 0 ; i < distance_number; i++)
     {
-        signal = CLidarPacket::bufToUByte((buffer+ head_ptr_offset) + 3*i);
-        distance = CLidarPacket::bufToUByte2((buffer+ head_ptr_offset) + 3*i + 1);
+        signal = DTFCLidarPacket::bufToUByte((buffer+ head_ptr_offset) + 3*i);
+        distance = DTFCLidarPacket::bufToUByte2((buffer+ head_ptr_offset) + 3*i + 1);
         // if((distance < 6000)&&(distance > 0))
         // {
         //     tmpnum = (distance / 400) * signal * signal;
@@ -256,7 +256,7 @@ TToothScan CLidarUnpacket::unpacketNewLidarScanHasSingal(CLidarPacket &packet)
             tooth_scan.Shield_count++;
             //printf("Dis:%6.2f\n\r", tooth_scan.distance[i]);
         }
-        //printf("[CLidarUnpacket]sigal %d! distance %5.2f\n", tooth_scan.signal[i], tooth_scan.distance[i]);
+        //printf("[DTFCLidarUnpacket]sigal %d! distance %5.2f\n", tooth_scan.signal[i], tooth_scan.distance[i]);
     }
     return tooth_scan;
 }
@@ -269,7 +269,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TLidarError CLidarUnpacket::unpacketHealthInfo(CLidarPacket &packet)
+TLidarError DTFCLidarUnpacket::unpacketHealthInfo(DTFCLidarPacket &packet)
 {
     u8 health_info = *(packet.getParamPtr());
     return TLidarError(health_info);
@@ -283,7 +283,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-int CLidarUnpacket::unpacketLidarSpeed(CLidarPacket &packet)
+int DTFCLidarUnpacket::unpacketLidarSpeed(DTFCLidarPacket &packet)
 {
     int lidar_speed = *(packet.getParamPtr());
     return lidar_speed;
@@ -296,7 +296,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u8 *CLidarUnpacket::unpacketLidarInformation(CLidarPacket &packet)
+u8 *DTFCLidarUnpacket::unpacketLidarInformation(DTFCLidarPacket &packet)
 {
     u8 *pTemp = packet.getParamPtr();
 
@@ -310,7 +310,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-u8 CLidarUnpacket::UnpackerLidarVersion(CLidarPacket &packet)
+u8 DTFCLidarUnpacket::UnpackerLidarVersion(DTFCLidarPacket &packet)
 {
     u8 ver = packet.getPrototypeCode();
     return ver;

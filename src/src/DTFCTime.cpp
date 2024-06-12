@@ -1,5 +1,5 @@
 /**********************************************************************************
-File name:	  CTime.cpp
+File name:	  DTFCTime.cpp
 Author:       Kimbo
 Version:      V1.5.0
 Date:	 	  2016-4-25
@@ -13,8 +13,8 @@ History:
 ***********************************************************************************/
 
 /********************************** File includes *********************************/
-#include "CTime.h"
-#include "CLogUtitls.h"
+#include "DTFCTime.h"
+#include "DTFCLogUtitls.h"
 
 /********************************** System libs includes **************************/
 #include <sys/time.h>
@@ -27,27 +27,27 @@ using namespace dtfeverest;
 using namespace dtfeverest::dtfhwdrivers;
 
 /***********************************************************************************
-Function:     CTime
+Function:     DTFCTime
 Description:  The constructor of file path class
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CTime::CTime()
+DTFCTime::DTFCTime()
 {
 
 }
 
 /***********************************************************************************
-Function:     ~CTime
+Function:     ~DTFCTime
 Description:  The destructor of file path class
 Input:        None
 Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-CTime::~CTime()
+DTFCTime::~DTFCTime()
 {
 
 }
@@ -60,7 +60,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TTimeStamp CTime::addTime(TTimeStamp time, double time_ms)
+TTimeStamp DTFCTime::addTime(TTimeStamp time, double time_ms)
 {
     assert(time != INVALID_TIMESTAMP && time_ms > 0);
 
@@ -76,7 +76,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TTimeStamp CTime::getRealTime()
+TTimeStamp DTFCTime::getRealTime()
 {
     timespec  tim;
     clock_gettime(CLOCK_REALTIME, &tim);
@@ -92,7 +92,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TTimeStamp CTime::getCpuTime()
+TTimeStamp DTFCTime::getCpuTime()
 {
     timespec  tim;
     clock_gettime(CLOCK_MONOTONIC, &tim);
@@ -107,7 +107,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-TTimeStamp CTime::time_tToTimestamp(const time_t &t)
+TTimeStamp DTFCTime::time_tToTimestamp(const time_t &t)
 {
     return (((uint64_t)t) * (uint64_t)10000000) + ((uint64_t)116444736*1000000000);
 }
@@ -120,7 +120,7 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-double CTime::timeDifference( const TTimeStamp &t1, const TTimeStamp &t2 )
+double DTFCTime::timeDifference( const TTimeStamp &t1, const TTimeStamp &t2 )
 {
 	assert(t1!=INVALID_TIMESTAMP);
 	assert(t2!=INVALID_TIMESTAMP);
@@ -136,10 +136,10 @@ Output:       None
 Return:       None
 Others:       None
 ***********************************************************************************/
-std::string CTime::getTimeString()
+std::string DTFCTime::getTimeString()
 {
     TTimeParts parts;
-    timestampToParts(CTime::getRealTime(), parts, true);
+    timestampToParts(DTFCTime::getRealTime(), parts, true);
     return format("%04u%02u%02u-%02u%02u%02u",
         (unsigned int)parts.year,
         (unsigned int)parts.month,
@@ -152,7 +152,7 @@ std::string CTime::getTimeString()
 /*---------------------------------------------------------------
 					timestampToParts
   ---------------------------------------------------------------*/
-void CTime::timestampToParts( TTimeStamp t, TTimeParts &p , bool localTime)
+void DTFCTime::timestampToParts( TTimeStamp t, TTimeParts &p , bool localTime)
 {
 	double T = timestampTotime_t(t);
 	time_t tt = time_t(T);
@@ -174,7 +174,7 @@ void CTime::timestampToParts( TTimeStamp t, TTimeParts &p , bool localTime)
 /*---------------------------------------------------------------
 					timestampTotime_t
   ---------------------------------------------------------------*/
-double CTime::timestampTotime_t( const TTimeStamp  &t )
+double DTFCTime::timestampTotime_t( const TTimeStamp  &t )
 {
     return double(t - ((uint64_t)116444736*1000000000)) / 10000000.0;
 }

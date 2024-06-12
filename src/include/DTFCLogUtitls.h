@@ -1,6 +1,6 @@
 
-#ifndef EVEREST_BASE_CLOGUTILS_H_
-#define EVEREST_BASE_CLOGUTILS_H_
+#ifndef EVEREST_BASE_DTFCLOGUTILS_H_
+#define EVEREST_BASE_DTFCLOGUTILS_H_
 
 #include <string>
 #include <vector>
@@ -8,7 +8,7 @@
 #include <stdarg.h>
 #include <sstream>
 #include <sys/stat.h>
-#include "CTime.h"
+#include "DTFCTime.h"
 
 /* Change ofstream to*/
 template<class T>

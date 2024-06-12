@@ -1,6 +1,6 @@
 
-#ifndef __TYPEDEF_H__
-#define __TYPEDEF_H__
+#ifndef __DTFTYPEDEF_H__
+#define __DTFTYPEDEF_H__
 
 #include <stdint.h>
 

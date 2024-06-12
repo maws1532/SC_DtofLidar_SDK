@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	C3iroboticsLidarProtocol.h
+File name:	DTFC3iroboticsLidarProtocol.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-04

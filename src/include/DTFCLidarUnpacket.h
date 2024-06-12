@@ -1,5 +1,5 @@
 /*********************************************************************************
-File name:	  CLidarUnpacket.h
+File name:	  DTFCLidarUnpacket.h
 Author:       Kimbo
 Version:      V1.7.1
 Date:	 	  2017-02-06
@@ -12,11 +12,11 @@ History:
 	Modification:
 ***********************************************************************************/
 
-#ifndef EVEREST_LIDAR_CLIDARUNPACKET_H
-#define EVEREST_LIDAR_CLIDARUNPACKET_H
+#ifndef EVEREST_LIDAR_DTFCLIDARUNPACKET_H
+#define EVEREST_LIDAR_DTFCLIDARUNPACKET_H
 
 /******************************* Current libs includes ****************************/
-#include "CLidarPacket.h"
+#include "DTFCLidarPacket.h"
 
 /******************************* System libs includes *****************************/
 #include <vector>
@@ -47,38 +47,38 @@ namespace dtfeverest
 
         
 
-		class CLidarUnpacket
+		class DTFCLidarUnpacket
 		{
             public:
 
                 /* Constructor */
-                CLidarUnpacket();
+                DTFCLidarUnpacket();
 
                 /* Destructor */
-                ~CLidarUnpacket();
+                ~DTFCLidarUnpacket();
 
                 /* Lidar unpacket */
-                static TToothScan unpacketLidarScan(CLidarPacket &packet);
+                static TToothScan unpacketLidarScan(DTFCLidarPacket &packet);
 
                 /* Lidar unpacket */
-                static TToothScan unpacketLidarScan2(CLidarPacket &packet);
+                static TToothScan unpacketLidarScan2(DTFCLidarPacket &packet);
 
                 /* Lidar unpacket */
-                static TToothScan unpacketNewLidarScanHasSingal(CLidarPacket &packet);
+                static TToothScan unpacketNewLidarScanHasSingal(DTFCLidarPacket &packet);
 
                 /* Lidar unpacket */
-                static TToothScan unpacketNewLidarScanNoSingal(CLidarPacket &packet);
+                static TToothScan unpacketNewLidarScanNoSingal(DTFCLidarPacket &packet);
 
                 /* Health info unpacket */
-                static TLidarError unpacketHealthInfo(CLidarPacket &packet);
+                static TLidarError unpacketHealthInfo(DTFCLidarPacket &packet);
 
                 /* Lidar speed */
-                static int unpacketLidarSpeed(CLidarPacket &packet);
+                static int unpacketLidarSpeed(DTFCLidarPacket &packet);
                 /* Lidar Information */
-                static u8 *unpacketLidarInformation(CLidarPacket &packet);
+                static u8 *unpacketLidarInformation(DTFCLidarPacket &packet);
 
                 /*get lidar version*/                
-                static u8 UnpackerLidarVersion(CLidarPacket &packet); 
+                static u8 UnpackerLidarVersion(DTFCLidarPacket &packet); 
 
 
 
